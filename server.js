@@ -1,6 +1,7 @@
-// Local server: node server.js  ->  http://localhost:5500
+// Local: node server.js -> http://localhost:5500. On Vercel the exported handler serves every route (see vercel.json).
 // Serves the cheat sheet and proxies the "Messages" section to the Claude API.
 const http = require('http');
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
@@ -30,6 +31,14 @@ try {
 const sdk = require('@anthropic-ai/sdk');
 const Anthropic = sdk.default || sdk;
 const hasKey = () => Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
+// A public URL in front of a paid API key needs a gate: hosted deployments refuse to call Claude without APP_PASSWORD.
+const HOSTED = Boolean(process.env.VERCEL);
+const passwordOk = (req) => {
+  const want = process.env.APP_PASSWORD;
+  if (!want) return !HOSTED;
+  const got = Buffer.from(String(req.headers['x-app-password'] || ''));
+  return got.length === Buffer.byteLength(want) && crypto.timingSafeEqual(got, Buffer.from(want));
+};
 
 // ---------- system prompt: tutor role + the student's own notes ----------
 function notesFromPage() {
@@ -203,12 +212,16 @@ function sendJson(res, status, obj) {
   res.end(JSON.stringify(obj));
 }
 
-const KEY_HELP = 'No valid API key. Open the file ".env" in this folder, paste your key after ANTHROPIC_API_KEY= , save, and restart the server (close the window and run start.bat again). Keys are created at console.anthropic.com -> API keys.';
+const KEY_HELP = HOSTED
+  ? 'No valid API key. In Vercel open Project -> Settings -> Environment Variables, add ANTHROPIC_API_KEY, then redeploy.'
+  : 'No valid API key. Open the file ".env" in this folder, paste your key after ANTHROPIC_API_KEY= , save, and restart the server (close the window and run start.bat again). Keys are created at console.anthropic.com -> API keys.';
 
 async function handleMessages(req, res) {
   let stream;
   let started = false;
   try {
+    if (HOSTED && !process.env.APP_PASSWORD) return sendJson(res, 503, { error: 'This deployment has no access password. In Vercel add the environment variable APP_PASSWORD and redeploy.' });
+    if (!passwordOk(req)) return sendJson(res, 403, { error: 'Wrong or missing access password. Press Send again to retype it.', code: 'password' });
     const body = JSON.parse(await readBody(req));
     if (!Array.isArray(body.messages) || !body.messages.length) return sendJson(res, 400, { error: 'Empty conversation.' });
     const client = new Anthropic();
@@ -251,11 +264,9 @@ async function handleMessages(req, res) {
   }
 }
 
-module.exports = { docxToText, xlsxToText, csvToText };
-
-if (require.main === module) http.createServer((req, res) => {
+function app(req, res) {
   const url = req.url.split('?')[0];
-  if (url === '/api/status') return sendJson(res, 200, { key: hasKey(), model: 'claude-opus-5' });
+  if (url === '/api/status') return sendJson(res, 200, { key: hasKey(), hosted: HOSTED, password: Boolean(process.env.APP_PASSWORD), model: 'claude-opus-5' });
   if (url === '/api/messages' && req.method === 'POST') return void handleMessages(req, res);
 
   let rel = decodeURIComponent(url);
@@ -277,7 +288,12 @@ if (require.main === module) http.createServer((req, res) => {
     });
     res.end(data);
   });
-}).listen(PORT, '127.0.0.1', () => {
+}
+
+module.exports = app;
+Object.assign(app, { docxToText, xlsxToText, csvToText });
+
+if (require.main === module) http.createServer(app).listen(PORT, '127.0.0.1', () => {
   console.log('Power BI cheat sheet at http://localhost:' + PORT);
   console.log(hasKey() ? 'Claude API key: found' : 'Claude API key: NOT set (edit .env to use the Messages section)');
 });

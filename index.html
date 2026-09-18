@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Power BI · Exam cheat sheet</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23f2c811'/%3E%3Cpath d='M8 26v-8h4v8zM14 26V12h4v14zM20 26V6h4v20z' fill='%231c1b19'/%3E%3C/svg%3E">
 <style>
 :root{
   color-scheme:light dark;
@@ -973,6 +974,15 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
     <div class="note"><b>The key never leaves your computer's server</b> — the browser never sees it. Do not share the .env file.</div>
   </div>
 
+  <div class="card hidden" id="hostWarn">
+    <h3>Finish the Vercel setup</h3>
+    <p>In Vercel open <b>Project → Settings → Environment Variables</b>, add these, then <b>Redeploy</b>:</p>
+    <ul>
+      <li id="hostKey"><code>ANTHROPIC_API_KEY</code> — your Claude API key.</li>
+      <li id="hostPw"><code>APP_PASSWORD</code> — a password you invent. This page asks for it before sending, so strangers with the link cannot spend your API credit.</li>
+    </ul>
+  </div>
+
   <div id="log"></div>
 
   <div class="card">
@@ -991,7 +1001,7 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
       <button class="btn primary" id="send">Send</button>
       <button class="btn hidden" id="stop">Stop</button>
       <button class="btn" id="newChat">New conversation</button>
-      <small><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to send · data files are sent as header + first 60 rows</small>
+      <small><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to send · data files are sent as header + first 60 rows<span id="limitNote"></span></small>
     </div>
   </div>
 </section>
@@ -1266,7 +1276,11 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
   var sendBtn = document.getElementById('send'), stopBtn = document.getElementById('stop');
   var drop = document.getElementById('drop'), fileInput = document.getElementById('fileInput');
   var pending = [], convo = [], controller = null;
-  var MAX_TOTAL = 30 * 1024 * 1024;
+  // Hosted (Vercel) requests are capped near 4.5 MB and base64 adds a third, so keep files under ~3 MB there.
+  var LOCAL = /^(localhost|127.0.0.1)$/.test(location.hostname);
+  var MAX_TOTAL = LOCAL ? 30 * 1024 * 1024 : 3 * 1024 * 1024;
+  var status = { key: true, hosted: !LOCAL, password: false };
+  if (!LOCAL) document.getElementById('limitNote').textContent = ' · online limit: 3 MB of files per message';
 
   function inline(s){
     return esc(s)
@@ -1332,7 +1346,7 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
   function addFiles(list){
     Array.prototype.forEach.call(list, function(file){
       var total = pending.reduce(function(a, f){ return a + f.size; }, 0);
-      if (total + file.size > MAX_TOTAL){ addMsg('assistant err', '<p>“' + esc(file.name) + '” was not added: the files together go over 30 MB.</p>'); return; }
+      if (total + file.size > MAX_TOTAL){ addMsg('assistant err', '<p>“' + esc(file.name) + '” was not added: the files together go over ' + (LOCAL ? '30' : '3') + ' MB' + (LOCAL ? '' : ' (online limit — run it locally with start.bat for bigger files)') + '.</p>'); return; }
       var r = new FileReader();
       r.onload = function(){ pending.push({ name: file.name, size: file.size, data: String(r.result).split(',')[1] || '' }); renderChips(); };
       r.readAsDataURL(file);
@@ -1351,10 +1365,18 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
   function busy(on){
     sendBtn.disabled = on; stopBtn.classList.toggle('hidden', !on);
   }
+  function getPassword(){
+    if (!status.password) return '';
+    var pw = ''; try{ pw = sessionStorage.getItem('pbi.pw') || ''; }catch(e){}
+    if (!pw){ pw = window.prompt('Access password for this site:') || ''; try{ sessionStorage.setItem('pbi.pw', pw); }catch(e){} }
+    return pw;
+  }
   function send(){
     if (controller) return;
     var text = ask.value.trim();
     if (!text && !pending.length) return;
+    var pw = getPassword();
+    if (status.password && !pw) return;
     if (!text) text = 'Solve this exercise step by step, in exam order, with everything I need to paste.';
     var content = pending.map(function(f){ return { type: 'file', name: f.name, data: f.data }; });
     content.push({ type: 'text', text: text });
@@ -1370,9 +1392,13 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
       body.innerHTML = '<p>' + esc(msg) + '</p>';
       convo.pop();
     }
-    fetch('/api/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: convo }), signal: controller.signal })
+    fetch('/api/messages', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-App-Password': pw }, body: JSON.stringify({ messages: convo }), signal: controller.signal })
       .then(function(res){
-        if (!res.ok) return res.json().then(function(j){ throw new Error(j.error || ('Server error ' + res.status)); });
+        if (res.status === 413) throw new Error('The files are too big for the online version (about 3 MB per message). Send fewer or smaller files, or run it locally with start.bat.');
+        if (!res.ok) return res.json().catch(function(){ return {}; }).then(function(j){
+          if (j.code === 'password'){ try{ sessionStorage.removeItem('pbi.pw'); }catch(e){} }
+          throw new Error(j.error || ('Server error ' + res.status));
+        });
         var reader = res.body.getReader(), dec = new TextDecoder();
         function pump(){
           return reader.read().then(function(r){
@@ -1412,7 +1438,11 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
   });
   function checkStatus(){
     fetch('/api/status').then(function(r){ return r.json(); }).then(function(s){
-      document.getElementById('keyWarn').classList.toggle('hidden', !!s.key);
+      status = s;
+      document.getElementById('keyWarn').classList.toggle('hidden', !!s.key || !!s.hosted);
+      document.getElementById('hostWarn').classList.toggle('hidden', !s.hosted || (s.key && s.password));
+      document.getElementById('hostKey').classList.toggle('hidden', !!s.key);
+      document.getElementById('hostPw').classList.toggle('hidden', !!s.password);
     }).catch(function(){ document.getElementById('keyWarn').classList.remove('hidden'); });
   }
 
