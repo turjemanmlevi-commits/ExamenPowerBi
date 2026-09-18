@@ -203,7 +203,7 @@ td:first-child{width:38%}
   <hr>
   <a href="#checklist"><b>✓</b>Final checklist</a>
   <a href="#syntax"><b>ƒ</b>Syntax &amp; shortcuts</a>
-  <a href="#messages"><b>✉</b>Messages (Claude)</a>
+  <a href="#messages"><b>✉</b>Messages</a>
 </nav>
 
 <main id="main">
@@ -961,13 +961,13 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
 
 <!-- ============ MESSAGES ============ -->
 <section id="messages">
-  <header><span class="n">✉</span><h2>Messages — send the exercise to Claude</h2></header>
-  <p class="when"><b>How it works:</b> drop the exercise brief and the data files, press Send, and Claude returns the full walkthrough (cleaning → relationships → measures → visuals) with your real table and column names and code to paste.</p>
+  <header><span class="n">✉</span><h2>Messages — send the exercise to the tutor</h2></header>
+  <p class="when"><b>How it works:</b> drop the exercise brief and the data files, press Send, and the tutor returns the full walkthrough (cleaning → relationships → measures → visuals) with your real table and column names and code to paste.</p>
 
   <div class="card hidden" id="keyWarn">
     <h3>API key needed</h3>
     <ol>
-      <li>Create a key at <b>console.anthropic.com</b> → API keys (API usage is billed separately from a Claude subscription).</li>
+      <li>Create a key at <b>console.anthropic.com</b> → API keys (API usage is billed separately from any chat subscription).</li>
       <li>Open the file <code>.env</code> in this folder with Notepad and paste the key right after <code>ANTHROPIC_API_KEY=</code></li>
       <li>Save, close the black server window and run <code>start.bat</code> again.</li>
     </ol>
@@ -978,7 +978,7 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
     <h3>Finish the Vercel setup</h3>
     <p>In Vercel open <b>Project → Settings → Environment Variables</b>, add these, then <b>Redeploy</b>:</p>
     <ul>
-      <li id="hostKey"><code>ANTHROPIC_API_KEY</code> — your Claude API key.</li>
+      <li id="hostKey"><code>ANTHROPIC_API_KEY</code> — your API key.</li>
     </ul>
   </div>
 
@@ -1270,7 +1270,7 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
     document.querySelectorAll('main section').forEach(function(s){ io.observe(s); });
   }
 
-  // ---------- Messages (Claude) ----------
+  // ---------- Messages ----------
   var logEl = document.getElementById('log'), ask = document.getElementById('ask'), chips = document.getElementById('chips');
   var sendBtn = document.getElementById('send'), stopBtn = document.getElementById('stop');
   var drop = document.getElementById('drop'), fileInput = document.getElementById('fileInput');
@@ -1322,7 +1322,7 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
   }
   function addMsg(role, html){
     var d = document.createElement('div'); d.className = 'msg ' + role;
-    var who = document.createElement('div'); who.className = 'who'; who.textContent = role === 'user' ? 'You' : 'Claude';
+    var who = document.createElement('div'); who.className = 'who'; who.textContent = role === 'user' ? 'You' : 'Tutor';
     var body = document.createElement('div'); body.innerHTML = html;
     d.appendChild(who); d.appendChild(body); logEl.appendChild(d);
     return body;

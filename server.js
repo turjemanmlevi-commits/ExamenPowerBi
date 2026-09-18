@@ -1,5 +1,5 @@
 // Local: node server.js -> http://localhost:5500. On Vercel the exported handler serves every route (see vercel.json).
-// Serves the cheat sheet and proxies the "Messages" section to the Claude API.
+// Serves the cheat sheet and proxies the "Messages" section to the tutor API.
 const http = require('http');
 const crypto = require('crypto');
 const fs = require('fs');
@@ -158,7 +158,7 @@ function csvToText(buf) {
     + lines.slice(0, SAMPLE_ROWS + 1).join('\n');
 }
 
-// Browser sends {type:"file", name, data(base64)}; turn each into Claude content blocks.
+// Browser sends {type:"file", name, data(base64)}; turn each into API content blocks.
 function fileToBlocks(file) {
   const name = String(file.name || 'file');
   const ext = path.extname(name).toLowerCase();
@@ -244,7 +244,7 @@ async function handleMessages(req, res) {
     });
     const final = await stream.finalMessage();
     if (!started) res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-    if (final.stop_reason === 'refusal') res.write('\n\n[Claude declined to answer this request.]');
+    if (final.stop_reason === 'refusal') res.write('\n\n[The tutor declined to answer this request.]');
     if (final.stop_reason === 'max_tokens') res.write('\n\n[The answer hit the length limit. Send "continue" to get the rest.]');
     res.end();
   } catch (err) {
@@ -253,7 +253,7 @@ async function handleMessages(req, res) {
     if (err instanceof Anthropic.AuthenticationError || err instanceof Anthropic.PermissionDeniedError) { status = 401; msg = KEY_HELP; }
     else if (err instanceof Anthropic.RateLimitError) { status = 429; msg = 'Rate limited by the API. Wait a minute and send again.'; }
     else if (err instanceof Anthropic.BadRequestError) { status = 400; msg = 'The API rejected the request: ' + msg; }
-    else if (err instanceof Anthropic.APIConnectionError) { status = 502; msg = 'Could not reach the Claude API. Check your internet connection.'; }
+    else if (err instanceof Anthropic.APIConnectionError) { status = 502; msg = 'Could not reach the API. Check your internet connection.'; }
     else if (err instanceof Anthropic.APIError) { status = err.status || 500; msg = `API error ${status}: ${msg}`; }
     else if (err && err.userFacing) status = 400;
     else if (!hasKey()) { status = 401; msg = KEY_HELP; }
@@ -265,7 +265,7 @@ async function handleMessages(req, res) {
 
 function app(req, res) {
   const url = req.url.split('?')[0];
-  if (url === '/api/status') return sendJson(res, 200, { key: hasKey(), hosted: HOSTED, password: Boolean(process.env.APP_PASSWORD), model: 'claude-opus-5' });
+  if (url === '/api/status') return sendJson(res, 200, { key: hasKey(), hosted: HOSTED, password: Boolean(process.env.APP_PASSWORD) });
   if (url === '/api/messages' && req.method === 'POST') return void handleMessages(req, res);
 
   let rel = decodeURIComponent(url);
@@ -294,5 +294,5 @@ Object.assign(app, { docxToText, xlsxToText, csvToText });
 
 if (require.main === module) http.createServer(app).listen(PORT, '127.0.0.1', () => {
   console.log('Power BI cheat sheet at http://localhost:' + PORT);
-  console.log(hasKey() ? 'Claude API key: found' : 'Claude API key: NOT set (edit .env to use the Messages section)');
+  console.log(hasKey() ? 'API key: found' : 'API key: NOT set (edit .env to use the Messages section)');
 });
