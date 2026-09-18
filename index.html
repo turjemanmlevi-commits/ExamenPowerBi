@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Power BI · Exam cheat sheet</title>
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#f5f4ef; --surface:#ffffff; --surface2:#efede6; --ink:#1c1b19; --muted:#69655c;
+  --line:#dedbd1; --accent:#f2c811; --accent-ink:#7a5f00; --accent-soft:#fdf6d3;
+  --red:#c0392b; --red-soft:#fbeae7; --green:#1e7d4f; --green-soft:#e6f4ec; --blue:#2458a6; --blue-soft:#e8eff9;
+  --code-bg:#1b1c21; --code-ink:#e6e4dd; --code-var:#ffd84a; --code-head:#25272e;
+  --sans:"Segoe UI",system-ui,-apple-system,sans-serif; --mono:"Cascadia Code","Cascadia Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#131418; --surface:#1b1d23; --surface2:#23262e; --ink:#eceae4; --muted:#a09c92;
+  --line:#30333c; --accent-ink:#f2c811; --accent-soft:#2c2810;
+  --red:#ff8a7a; --red-soft:#33191a; --green:#6fd3a0; --green-soft:#15291f; --blue:#8db5f5; --blue-soft:#17233a;
+  --code-bg:#0e0f12; --code-head:#181a1f;
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+a{color:inherit}
+kbd{font:12px var(--mono);background:var(--surface2);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:1px 5px}
+
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;white-space:nowrap}
+.brand i{display:inline-block;width:22px;height:22px;border-radius:5px;background:var(--accent);position:relative}
+.brand i::after{content:"";position:absolute;left:5px;right:5px;bottom:4px;height:14px;background:
+  linear-gradient(#1c1b19,#1c1b19) 0 100%/3px 6px no-repeat,
+  linear-gradient(#1c1b19,#1c1b19) 50% 100%/3px 10px no-repeat,
+  linear-gradient(#1c1b19,#1c1b19) 100% 100%/3px 14px no-repeat}
+.brand small{font-weight:400;color:var(--muted)}
+#q{flex:1;max-width:460px;margin-left:auto;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+#q:focus,input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 12px;font:inherit;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--surface2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#1c1b19;font-weight:600}
+.btn:disabled{opacity:.5;cursor:default}
+#toggleAdapt{display:none}
+
+.layout{display:grid;grid-template-columns:210px minmax(0,1fr) 310px;gap:28px;max-width:1500px;margin:0 auto;padding:24px 20px 80px}
+nav{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;font-size:14px}
+nav a{display:flex;gap:8px;padding:6px 10px;border-radius:7px;text-decoration:none;color:var(--muted);border-left:3px solid transparent}
+nav a:hover{color:var(--ink);background:var(--surface2)}
+nav a.on{color:var(--ink);font-weight:600;border-left-color:var(--accent);background:var(--surface)}
+nav a b{font-weight:600;color:var(--accent-ink);min-width:18px;font-variant-numeric:tabular-nums}
+nav hr{border:0;border-top:1px solid var(--line);margin:8px 0}
+
+.adapt{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.adapt h2{margin:0 0 4px;font-size:16px}
+.adapt p{margin:0 0 12px;color:var(--muted);font-size:13px}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.presets .btn{padding:4px 9px;font-size:12.5px}
+.adapt fieldset{border:0;border-top:1px solid var(--line);margin:0;padding:10px 0 4px}
+.adapt legend{padding:0 6px 0 0;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink)}
+.adapt label{display:grid;grid-template-columns:1fr 1.15fr;align-items:center;gap:8px;margin:5px 0;font-size:12.5px;color:var(--muted)}
+.adapt input{width:100%;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:12.5px var(--mono)}
+.adapt input.flash{background:var(--accent-soft);border-color:var(--accent)}
+
+main{min-width:0}
+section{margin-bottom:44px}
+section>header{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+section>header .n{font:700 13px var(--mono);background:var(--accent);color:#1c1b19;border-radius:6px;padding:2px 8px}
+h1{font-size:28px;line-height:1.2;margin:0 0 6px;letter-spacing:-.01em}
+h2{font-size:22px;margin:0;letter-spacing:-.01em}
+.when{margin:0 0 16px;padding:9px 12px;background:var(--blue-soft);color:var(--blue);border-radius:8px;font-size:14px}
+.lead{color:var(--muted);margin:0 0 18px;max-width:70ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.card h3{margin:0 0 8px;font-size:16px}
+.card h3 .x{font:600 10.5px var(--sans);letter-spacing:.05em;text-transform:uppercase;background:var(--surface2);color:var(--muted);border-radius:4px;padding:2px 6px;margin-left:6px;vertical-align:2px}
+.card p{margin:8px 0}
+.card ul,.card ol{margin:8px 0;padding-left:22px}
+.card li{margin:4px 0}
+.path{font-weight:600;background:var(--surface2);border-radius:5px;padding:1px 6px}
+code{font:13px var(--mono);background:var(--surface2);border-radius:4px;padding:1px 5px}
+code.cp{cursor:copy;border:1px dashed var(--line)}
+code.cp:hover{background:var(--accent-soft);border-color:var(--accent)}
+.warn,.tip,.note{border-left:4px solid;border-radius:0 8px 8px 0;padding:9px 12px;margin:10px 0;font-size:14px}
+.warn{border-color:var(--red);background:var(--red-soft)}
+.tip{border-color:var(--green);background:var(--green-soft)}
+.note{border-color:var(--accent);background:var(--accent-soft)}
+.warn b:first-child{color:var(--red)} .tip b:first-child{color:var(--green)} .note b:first-child{color:var(--accent-ink)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+td:first-child{width:38%}
+.fix td:first-child{color:var(--red);font-weight:600}
+.tablewrap{overflow-x:auto}
+
+/* relationship lines */
+.rel{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;margin:8px 0;font:13px var(--mono)}
+.rel span{padding:8px 10px;border-radius:8px;border:1px solid var(--line);overflow-wrap:anywhere}
+.rel .one{background:var(--green-soft);border-color:var(--green)}
+.rel .many{background:var(--blue-soft);border-color:var(--blue)}
+.rel .ar{border:0;padding:0;font-weight:700;white-space:nowrap;color:var(--muted)}
+.rel small{display:block;font:11px var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.helper{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.helper label{display:block;font-size:13px;color:var(--muted)}
+.helper input,.helper select{width:100%;margin-top:3px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink);font:13px var(--sans)}
+#relOut{margin-top:12px}
+
+.snip{margin:10px 0;border-radius:10px;overflow:hidden;background:var(--code-bg);border:1px solid var(--line)}
+.snip-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 8px 6px 12px;background:var(--code-head);color:#a9a69c;font:600 11.5px var(--sans);letter-spacing:.05em;text-transform:uppercase}
+.copy{border:0;border-radius:6px;background:var(--accent);color:#1c1b19;font:700 12px var(--sans);padding:5px 12px;cursor:pointer}
+.copy:hover{filter:brightness(1.08)}
+.copy.ok{background:#3ecf8e}
+.snip pre{margin:0;padding:12px 14px;overflow-x:auto;color:var(--code-ink);font:13.5px/1.55 var(--mono);tab-size:2}
+.snip .var{color:var(--code-var);border-bottom:1px dotted var(--code-var);cursor:pointer}
+.uses{display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding:7px 12px 9px;border-top:1px solid #2b2d35;color:#8d8a80;font-size:12px}
+.uses button{border:1px solid #3a3d47;background:transparent;color:var(--code-var);border-radius:99px;padding:1px 9px;font:12px var(--sans);cursor:pointer}
+.uses button:hover{background:#2b2d35}
+
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:0 0 16px 44px;margin:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#1c1b19;font:700 13px/28px var(--mono);text-align:center}
+.steps li::after{content:"";position:absolute;left:13px;top:30px;bottom:2px;width:2px;background:var(--line)}
+.steps li:last-child{padding-bottom:0}.steps li:last-child::after{display:none}
+.steps b a{text-decoration-color:var(--accent);text-underline-offset:3px}
+.steps span{display:block;color:var(--muted);font-size:14px}
+
+.check label{display:flex;gap:10px;align-items:flex-start;padding:7px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.check label:last-of-type{border-bottom:0}
+.check input{width:18px;height:18px;margin-top:2px;accent-color:#d4ad00}
+.check input:checked+span{color:var(--muted);text-decoration:line-through}
+.progress{height:8px;border-radius:99px;background:var(--surface2);overflow:hidden;margin:6px 0 10px}
+.progress i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+
+/* messages */
+#drop{border:2px dashed var(--line);border-radius:10px;padding:18px;text-align:center;color:var(--muted);cursor:pointer;transition:background .15s,border-color .15s}
+#drop.over,#drop:hover{border-color:var(--accent);background:var(--accent-soft)}
+#chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--line);border-radius:99px;padding:3px 6px 3px 11px;font-size:13px}
+.chip button{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;padding:2px 5px;border-radius:50%}
+.chip button:hover{background:var(--line);color:var(--ink)}
+#ask{width:100%;min-height:84px;margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;resize:vertical}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.quick .btn{font-size:12.5px;padding:4px 10px}
+.sendrow{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.sendrow small{color:var(--muted);margin-left:auto}
+.msg{border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:12px;background:var(--surface)}
+.msg.user{background:var(--surface2)}
+.msg .who{font:700 11.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:4px}
+.msg.user .who{color:var(--muted)}
+.msg h3{font-size:17px;margin:18px 0 6px}.msg h4{font-size:15px;margin:14px 0 4px}
+.msg h3:first-child,.msg h4:first-child{margin-top:0}
+.msg p{margin:7px 0}.msg ul,.msg ol{margin:7px 0;padding-left:24px}.msg li{margin:4px 0}
+.msg hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.msg.err{border-color:var(--red);background:var(--red-soft)}
+.thinking{color:var(--muted);font-style:italic}
+.thinking::after{content:"";display:inline-block;width:1.2em;text-align:left;animation:dots 1.2s steps(4,end) infinite}
+@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+@media (prefers-reduced-motion:reduce){.thinking::after{animation:none;content:"..."}html{scroll-behavior:auto}}
+
+.hidden{display:none!important}
+#empty{padding:40px 0;text-align:center;color:var(--muted)}
+
+@media (max-width:1240px){
+  .layout{grid-template-columns:200px minmax(0,1fr)}
+  #toggleAdapt{display:inline-block}
+  .adapt{position:fixed;top:58px;right:0;bottom:0;width:min(340px,100vw);max-height:none;border-radius:0;border-width:0 0 0 1px;z-index:15;transform:translateX(100%);transition:transform .2s;box-shadow:-12px 0 30px rgba(0,0,0,.18)}
+  .adapt.open{transform:none}
+}
+@media (max-width:820px){
+  .layout{grid-template-columns:minmax(0,1fr);padding:16px 16px 60px}
+  nav{position:static;display:flex;overflow-x:auto;max-height:none;gap:4px;padding-bottom:6px}
+  nav a{white-space:nowrap;border-left:0;border-bottom:3px solid transparent}
+  nav a.on{border-bottom-color:var(--accent)} nav hr{display:none}
+  .brand small{display:none} td:first-child{width:auto}
+  .rel{grid-template-columns:1fr}.rel .ar{text-align:center}.helper{grid-template-columns:1fr}
+}
+@media print{.top,nav,.adapt,.copy,.uses,#messages{display:none!important}.layout{display:block}.card,.snip{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand"><i></i>Power BI <small>· IEB exam cheat sheet</small></div>
+  <input id="q" type="search" placeholder="Search: top n, unpivot, merge, blank, YoY…   ( / )" autocomplete="off">
+  <button class="btn primary" id="toggleAdapt">My names</button>
+</div>
+
+<div class="layout">
+
+<nav id="nav">
+  <a href="#order"><b>0</b>Exam order</a>
+  <a href="#cleaning"><b>1</b>Cleaning</a>
+  <a href="#combine"><b>2</b>Append &amp; Merge</a>
+  <a href="#columns"><b>3</b>New columns</a>
+  <a href="#dates"><b>4</b>Date table</a>
+  <a href="#model"><b>5</b>Model</a>
+  <a href="#relationships"><b>6</b>Relationships</a>
+  <a href="#measures"><b>7</b>Measures</a>
+  <a href="#visuals"><b>8</b>Visuals</a>
+  <a href="#output"><b>9</b>Output</a>
+  <hr>
+  <a href="#mock1"><b>M1</b>TechCart</a>
+  <a href="#mock2"><b>M2</b>Meridian</a>
+  <hr>
+  <a href="#checklist"><b>✓</b>Final checklist</a>
+  <a href="#syntax"><b>ƒ</b>Syntax &amp; shortcuts</a>
+  <a href="#messages"><b>✉</b>Messages (Claude)</a>
+</nav>
+
+<main id="main">
+
+<!-- ============ 0 ORDER ============ -->
+<section id="order">
+  <h1>Power BI · Exam cheat sheet</h1>
+  <p class="lead">Mock 1 TechCart + Mock 2 Meridian. Every code block copies with one click. Anything in <span style="color:var(--accent-ink);font-weight:700">yellow</span> inside the code is one of <b>your</b> table or column names: change it once in the <b>“My names”</b> panel and every snippet updates.</p>
+  <div class="card">
+    <h3>Exam order: what to do and when</h3>
+    <ol class="steps">
+      <li><b>Read the brief and write down the 4 topics</b><span>They tell you what to analyse. That decides which columns you must NOT delete (e.g. ratings) and which measures you need.</span></li>
+      <li><b><a href="#cleaning">Get data → Transform data (Power Query): clean</a></b><span>Remove Top Rows → Headers → Remove columns → Replace Values → Change Type → Split/Unpivot. Types always before creating columns.</span></li>
+      <li><b><a href="#combine">Append / Merge if there are several files</a></b><span>After cleaning each query (same names and types), before creating calculated columns on the result.</span></li>
+      <li><b><a href="#columns">New columns (Custom / Conditional)</a></b><span>At the end of Power Query. Set their type straight away. Then filters, Enable Load off on source queries, and Close &amp; Apply.</span></li>
+      <li><b><a href="#dates">Date table</a></b><span>Outside Power Query, once the Date types are set. Create → Mark as date table → Sort by column.</span></li>
+      <li><b><a href="#relationships">Relationships (Model view)</a></b><span>From the dimension to the fact, 1:*, Single. Including Date[Date] → your date column.</span></li>
+      <li><b><a href="#measures">_Measures table and measures</a></b><span>Basics first (Total Sales, Total Orders), then ratios and time intelligence, which depend on them. $ / % format.</span></li>
+      <li><b><a href="#visuals">Visuals, one block per topic</a></b><span>First get them ALL on the page, even if ugly. Then polish.</span></li>
+      <li><b><a href="#output">Output: theme, slicers, navigation, bookmarks, captions</a></b><span>Scores points and gets forgotten.</span></li>
+      <li><b><a href="#checklist">Final checklist (5 min)</a></b><span>Save the .pbix before and after.</span></li>
+    </ol>
+    <div class="warn"><b>If something breaks and time is short:</b> make sure everything is present, even unpolished. A missing part scores zero; a part that is there with a default title scores almost everything.</div>
+  </div>
+</section>
+
+<!-- ============ 1 CLEANING ============ -->
+<section id="cleaning">
+  <header><span class="n">1</span><h2>Cleaning in Power Query — the right order</h2></header>
+  <p class="when"><b>When:</b> first thing, right after loading the data (Home → Transform data). Before the date table, relationships or measures.</p>
+
+  <div class="card">
+    <h3>The order</h3>
+    <ol>
+      <li><b>Remove Top Rows</b> (junk rows above the headers)</li>
+      <li><b>Use First Row as Headers</b></li>
+      <li><b>Remove columns</b> (keep only the ones you use: the brief asks for it)</li>
+      <li><b>Replace Values</b> (USD, $, typos, double spaces)</li>
+      <li><b>Change Type</b></li>
+      <li><b>Split / Unpivot</b></li>
+      <li><b>Calculated columns</b> (Custom / Conditional)</li>
+      <li><b>Filters</b></li>
+    </ol>
+    <div class="warn"><b>Types ALWAYS before creating calculated columns.</b> If price is text, the formula errors or comes out as Text, and later SUM returns blank.</div>
+    <div class="tip"><b>See nulls and errors at a glance:</b> View → Column quality / Column distribution.</div>
+  </div>
+
+  <div class="card">
+    <h3>Traps</h3>
+    <div class="tablewrap"><table class="fix">
+      <tr><th>What you see</th><th>What to do</th></tr>
+      <tr><td>"USD 94.70" in a numeric column</td><td>Replace Values: <code class="cp">USD </code> (with the space) → nothing. Then Decimal Number.</td></tr>
+      <tr><td>"$45" mixed with 45</td><td>Replace Values: <code>$</code> → nothing. Then a numeric type.</td></tr>
+      <tr><td>Columns whose name is a date (2025-01, 2025-02…)</td><td>Select the text/ID columns that stay fixed → right-click → <b>Unpivot Other Columns</b>. Rename Attribute / Value.</td></tr>
+      <tr><td>Text date "2025-01" (no day)</td><td>Add Column → Custom Column with the formula below → Date type.</td></tr>
+      <tr><td>dd/mm/yyyy converts wrongly</td><td>Change Type → <b>Using Locale</b> → Date → English (United Kingdom).</td></tr>
+      <tr><td>Double spaces / leftover spaces</td><td>Replace Values (2 spaces → 1) + Transform → Format → <b>Trim</b>.</td></tr>
+      <tr><td>"0nline" / "Inst0re" (zero instead of O)</td><td>Replace Values + tick <b>Match entire cell content</b> (under Advanced options).</td></tr>
+      <tr><td>Fully duplicated rows</td><td>Select ALL columns → Remove Rows → Remove Duplicates.</td></tr>
+      <tr><td>Duplicate ID in a dimension (breaks 1:*)</td><td>Sort by date descending → select ONLY the ID column → Remove Duplicates (keeps the most recent).</td></tr>
+      <tr><td>Amounts in several currencies</td><td>Custom Column: value × exchange rate (formula below).</td></tr>
+    </table></div>
+    <pre data-lang="M · Custom Column — text '2025-01' to date">Date.FromText(⟦m:datecol⟧ &amp; "-01")</pre>
+    <pre data-lang="M · Custom Column — convert to USD">⟦m:amount⟧ * ⟦m:rate⟧</pre>
+    <div class="warn"><b>After any Custom Column:</b> set its type (Date, Decimal Number…). It comes out as ABC123 (type Any) and ends up as text in the model.</div>
+  </div>
+
+  <div class="card">
+    <h3>Missing values (nulls)</h3>
+    <p>The brief says: if a column has many nulls, delete the <b>COLUMN</b>, not the rows.</p>
+    <div class="warn"><b>But</b> if that column is one of the topics you are asked to analyse, do NOT delete it: <code>AVERAGE</code> ignores blanks on its own.</div>
+  </div>
+
+  <div class="card">
+    <h3>Enable Load and query order</h3>
+    <p><b>When:</b> just before Close &amp; Apply, once you have your final queries.</p>
+    <ul>
+      <li>Right-click each <b>source</b> query (the ones that only feed an Append/Merge) → untick <b>Enable load</b>. They turn italic.</li>
+      <li>Group them: right-click → Move to group → <b>Source Queries</b> / <b>Report Queries</b>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 2 APPEND / MERGE ============ -->
+<section id="combine">
+  <header><span class="n">2</span><h2>Append and Merge Queries</h2></header>
+  <p class="when"><b>When:</b> in Power Query, after cleaning each query on its own (same headers, names and types) and before creating calculated columns on the result.</p>
+
+  <div class="card">
+    <h3>Which one do I need?</h3>
+    <div class="tablewrap"><table>
+      <tr><th>Situation</th><th>Use</th></tr>
+      <tr><td>Two files with the <b>same structure</b> (sales 2024 + sales 2025, store A + store B)</td><td><b>Append</b> → stacks rows. The table grows downwards.</td></tr>
+      <tr><td>I want to <b>bring columns</b> from another table using a key (actuals + budget, exchange rate per currency)</td><td><b>Merge</b> → joins columns. The table grows to the right.</td></tr>
+      <tr><td>A lookup table (countries, products, cost centres) I only use to filter or group</td><td><b>Neither:</b> leave it as a dimension and create a <a href="#relationships">1:* relationship</a>. That is what the star schema wants.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>Append — stack rows</h3>
+    <ol>
+      <li>In each query: same headers (<b>exact same name</b>, capitals included) and same types.</li>
+      <li>If you later need to know which file each row came from: before appending, Add Column → Custom Column in each one, e.g. <code class="cp">"2024"</code>.</li>
+      <li><span class="path">Home → Append Queries ▾ → Append Queries as New</span> (creates a new query, leaves the originals alone).</li>
+      <li>Two tables (or Three or more tables) → pick the queries → OK.</li>
+      <li>Rename the new query and <b>untick Enable load</b> on the two sources.</li>
+    </ol>
+    <pre data-lang="M · what it generates (formula bar)">= Table.Combine({⟦q:qa⟧, ⟦q:qb⟧})</pre>
+    <div class="tablewrap"><table class="fix">
+      <tr><th>Problem</th><th>Cause and fix</th></tr>
+      <tr><td>Half-empty duplicated columns appear (Price and price)</td><td>The names do not match. Rename in the sources so they are identical.</td></tr>
+      <tr><td>The stacked column is ABC123</td><td>Different types in each source. Set the type again in the new query.</td></tr>
+      <tr><td>Did it work?</td><td>Rows in the result = sum of the rows in the sources (bottom left, or Transform → Count Rows).</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>Merge — bring columns from another table</h3>
+    <ol>
+      <li>Check that the key column has the <b>same type</b> in both queries and is clean (Trim, no typos).</li>
+      <li>Select the main query (the one you want to keep whole) → <span class="path">Home → Merge Queries ▾ → Merge Queries as New</span>. (Plain <b>Merge Queries</b> adds the columns to the current query.)</li>
+      <li>Click the key column in the top table, choose the second table below and click its key column.<br><b>Several key columns:</b> <kbd>Ctrl</kbd>+click in the same order in both tables (small numbers 1, 2, 3 appear and must match).</li>
+      <li>Join Kind: <b>Left Outer</b> (all rows from the first, whatever matches from the second).</li>
+      <li>Read the message at the bottom: <i>"The selection matches X of Y rows"</i>. If X is very low, the keys do not match (type, spaces, capitals).</li>
+      <li>OK → on the new column (it says <i>Table</i>) click the <b>expand</b> icon (two arrows) → tick only the columns you want → <b>untick "Use original column name as prefix"</b> → OK.</li>
+      <li>Set the type of the expanded columns and untick Enable load on the sources.</li>
+    </ol>
+    <pre data-lang="M · what it generates — merge on one column">= Table.NestedJoin(⟦q:qa⟧, {"⟦key⟧"}, ⟦q:qb⟧, {"⟦key⟧"}, "⟦qb⟧", JoinKind.LeftOuter)</pre>
+    <pre data-lang="M · next step — expand">= Table.ExpandTableColumn(#"Merged Queries", "⟦qb⟧", {"⟦budcol⟧"}, {"⟦budcol⟧"})</pre>
+    <div class="tablewrap"><table>
+      <tr><th>Join Kind</th><th>What it returns</th></tr>
+      <tr><td><b>Left Outer</b> (the usual one)</td><td>All rows from the 1st + whatever matches from the 2nd. No match → null.</td></tr>
+      <tr><td>Inner</td><td>Only rows that exist in both.</td></tr>
+      <tr><td>Full Outer</td><td>All rows from both, matched or not.</td></tr>
+      <tr><td>Left Anti</td><td>Rows from the 1st with NO match. Handy for finding which rows fail.</td></tr>
+    </table></div>
+    <div class="tablewrap"><table class="fix">
+      <tr><th>Problem</th><th>Cause and fix</th></tr>
+      <tr><td>All null after expanding</td><td>Keys with different types (text vs number) or with spaces. Match the type + Trim in both and repeat.</td></tr>
+      <tr><td>MORE rows after the merge than before</td><td>The 2nd table has duplicated keys. Remove duplicates there before merging.</td></tr>
+      <tr><td>Columns named "Budget.cost_center_code"</td><td>You left the prefix ticked. Delete the Expanded step and redo it.</td></tr>
+      <tr><td>Nulls in just a few rows</td><td>Normal when one table has rows the other lacks (Mock 2: actuals has 2 more than budget). Do not delete them, comment on it.</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ 3 NEW COLUMNS ============ -->
+<section id="columns">
+  <header><span class="n">3</span><h2>When I add a new column</h2></header>
+  <p class="when"><b>When:</b> at the end of Power Query, with types set and Append/Merge done. After creating it: type → Close &amp; Apply → measure → format.</p>
+
+  <div class="card">
+    <h3>Column or measure? Decide first</h3>
+    <div class="tablewrap"><table>
+      <tr><th>I need…</th><th>Build it as</th></tr>
+      <tr><td>A value <b>per row</b>: amount = quantity × price, convert to USD, a label (Miss/Meet, High/Low)</td><td><b>Power Query column</b> (Custom or Conditional). This is what the notes use.</td></tr>
+      <tr><td>A per-row value that needs another model table or a measure</td><td><b>DAX calculated column</b> (Table tools → New column) with <code>RELATED</code>.</td></tr>
+      <tr><td>A total, average, ratio or % that must react to slicers</td><td><b>Measure</b>. Never a % as a column: the average of percentages gives a wrong answer.</td></tr>
+      <tr><td>I want it in a slicer, axis or legend</td><td>It has to be a <b>column</b> (a measure cannot go in a slicer).</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>The steps, always the same</h3>
+    <ol>
+      <li>Check the columns you will use have the right type (123 / 1.2, not ABC).</li>
+      <li><span class="path">Add Column → Custom Column</span> (formula) or <span class="path">Add Column → Conditional Column</span> (if/else without typing).</li>
+      <li><b>Set the type of the new column</b> (it comes out as ABC123): Decimal Number, Whole Number, Text or Date.</li>
+      <li>Home → <b>Close &amp; Apply</b>.</li>
+      <li>In the Data pane look at the icon: <b>Σ</b> = number, no icon/ABC = text.</li>
+      <li>Create the <a href="#measures-col">measures on the column</a> (do not drag the raw column: you would get "Sum of…").</li>
+      <li>If it is a category with a logical order (Low/Medium/High), create its order column and apply Sort by column.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Custom Column — formulas to paste</h3>
+    <p>In the Custom Column box do not type the name or the «=»: the name goes in the field above. Double-clicking a column in the list on the right inserts it correctly spelled.</p>
+    <pre data-lang="M · Custom Column — amount per row">⟦m:qty⟧ * ⟦m:price⟧</pre>
+    <pre data-lang="M · Custom Column — amount with discount">⟦m:qty⟧ * ⟦m:price⟧ * (1 - ⟦m:disc⟧)</pre>
+    <pre data-lang="M · Custom Column — difference (variance per row)">⟦m:actcol⟧ - ⟦m:budcol⟧</pre>
+    <pre data-lang="M · Custom Column — convert to USD">⟦m:amount⟧ * ⟦m:rate⟧</pre>
+    <div class="warn"><b>If the discount has nulls</b>, the discount formula returns null on those rows. Use this version:</div>
+    <pre data-lang="M · Custom Column — discount with nulls = 0">⟦m:qty⟧ * ⟦m:price⟧ * (1 - (if ⟦m:disc⟧ = null then 0 else ⟦m:disc⟧))</pre>
+  </div>
+
+  <div class="card">
+    <h3>Conditional Column (no M typing)</h3>
+    <ol>
+      <li><span class="path">Add Column → Conditional Column</span> → type the name in <b>New column name</b>.</li>
+      <li><b>If</b> row: Column Name (the one you test) · Operator (is less than, equals…) · Value · <b>Output</b>.</li>
+      <li><b>Add Clause</b> for each extra condition (these are the <i>else if</i>s).</li>
+      <li><b>Else</b>: the value for everything else.</li>
+      <li>OK → <b>set the type</b> (nearly always Text).</li>
+    </ol>
+    <div class="warn"><b>It is evaluated top to bottom:</b> the first condition that is true wins, so "&lt; 10" goes before "&lt; 20".</div>
+    <div class="warn"><b>In Output</b>, the selector on the left must be on <b>Value</b> (ABC123), not on "Select a column". Same for the Value box of the condition.</div>
+    <p>The same thing typed by hand in Custom Column (faster when you already have it here):</p>
+    <pre data-lang="M · Custom Column — two values">if ⟦m:basecol⟧ &lt; 0 then "Miss" else "Meet"</pre>
+    <pre data-lang="M · Custom Column — three bands">if ⟦m:basecol⟧ &lt; 10 then "Low"
+else if ⟦m:basecol⟧ &lt; 20 then "Medium"
+else "High"</pre>
+    <pre data-lang="M · Custom Column — with nulls (null ALWAYS first)">if ⟦m:basecol⟧ = null then "No data"
+else if ⟦m:basecol⟧ &lt; 10 then "Low"
+else if ⟦m:basecol⟧ &lt; 20 then "Medium"
+else "High"</pre>
+    <pre data-lang="M · Custom Column — condition on text">if ⟦m:flagcol⟧ = ⟦v:flagval⟧ then 1 else 0</pre>
+    <pre data-lang="M · Custom Column — two conditions at once">if ⟦m:basecol⟧ &gt;= 10 and ⟦m:flagcol⟧ = ⟦v:flagval⟧ then "Yes" else "No"</pre>
+    <div class="note"><b>M rules:</b> <code>if then else</code> in lowercase, always needs <code>else</code>, text in double quotes, case-sensitive ("Yes" ≠ "yes"). Comparing a null with &lt; or &gt; errors: that is why null is checked first.</div>
+    <p><b>Order column</b> so Low/Medium/High do not sort alphabetically (Whole Number type; then in the report: select the text column → Column tools → Sort by column → this one):</p>
+    <pre data-lang="M · Custom Column — category order">if ⟦m:newcol⟧ = "Low" then 1
+else if ⟦m:newcol⟧ = "Medium" then 2
+else 3</pre>
+  </div>
+
+  <div class="card">
+    <h3>The same as a DAX calculated column <span class="x">extra</span></h3>
+    <p><b>When:</b> you already closed Power Query and do not want to go back, or you need data from a related table. Table view → select the table → <span class="path">Table tools → New column</span>.</p>
+    <pre data-lang="DAX · New column — amount per row">Line Total = ⟦t:fact⟧[⟦qty⟧] * ⟦t:fact⟧[⟦price⟧]</pre>
+    <pre data-lang="DAX · New column — two values">⟦newcol⟧ = IF(⟦t:fact⟧[⟦basecol⟧] &lt; 0, "Miss", "Meet")</pre>
+    <pre data-lang="DAX · New column — several bands">⟦newcol⟧ =
+SWITCH(TRUE(),
+    ISBLANK(⟦t:fact⟧[⟦basecol⟧]), "No data",
+    ⟦t:fact⟧[⟦basecol⟧] &lt; 10, "Low",
+    ⟦t:fact⟧[⟦basecol⟧] &lt; 20, "Medium",
+    "High"
+)</pre>
+    <pre data-lang="DAX · New column — bring a value from the dimension (needs the relationship)">⟦dimcol⟧ = RELATED(⟦t:dim⟧[⟦dimcol⟧])</pre>
+    <div class="note"><b>In DAX</b> it is <code>IF()</code> in capitals with commas; in M it is <code>if then else</code> in lowercase. They do not mix.</div>
+  </div>
+
+  <div class="card" id="measures-col">
+    <h3>Measures on the new column</h3>
+    <p>In “My names” → <b>New column</b> type your column name and the value you want to count. Select the <b>_Measures</b> table → New measure → paste one at a time.</p>
+    <pre data-lang="DAX · New measure — if the column is a NUMBER">Total ⟦newcol⟧ = SUM(⟦t:fact⟧[⟦newcol⟧])</pre>
+    <pre data-lang="DAX · New measure">Avg ⟦newcol⟧ = AVERAGE(⟦t:fact⟧[⟦newcol⟧])</pre>
+    <pre data-lang="DAX · New measure — if the column is a CATEGORY: count rows">Num ⟦newval⟧ = CALCULATE(COUNTROWS(⟦t:fact⟧), ⟦t:fact⟧[⟦newcol⟧] = ⟦v:newval⟧)</pre>
+    <pre data-lang="DAX · New measure — % of rows with that value">% ⟦newval⟧ = DIVIDE([Num ⟦newval⟧], COUNTROWS(⟦t:fact⟧))</pre>
+    <pre data-lang="DAX · New measure — your base measure only for that value">⟦mSales⟧ ⟦newval⟧ = CALCULATE([⟦mSales⟧], ⟦t:fact⟧[⟦newcol⟧] = ⟦v:newval⟧)</pre>
+    <div class="tip"><b>Afterwards:</b> Measure tools → Format ($, %, decimals). To see the split by category you do not need a new measure: put the column on the axis and your base measure in values.</div>
+  </div>
+</section>
+
+<!-- ============ 4 DATES ============ -->
+<section id="dates">
+  <header><span class="n">4</span><h2>Date table</h2></header>
+  <p class="when"><b>When:</b> AFTER Close &amp; Apply, with the date columns already typed as Date. Before relationships and any time-intelligence measure.</p>
+
+  <div class="card">
+    <h3>Create the table</h3>
+    <p><span class="path">Table view → Home (or Table tools) → New table</span>. Paste:</p>
+    <pre data-lang="DAX · New table">⟦dateT⟧ =
+ADDCOLUMNS (
+    CALENDARAUTO( ),
+    "Year", YEAR ( [Date] ),
+    "Month Name", FORMAT ( [Date], "mmmm" ),
+    "Month Number", MONTH ( [Date] ),
+    "Day", DAY( [Date] ),
+    "Day of Week", FORMAT ( [Date], "ddd" ),
+    "Day of Week No", WEEKDAY( [Date],2 )
+)</pre>
+    <p><b>PLAN B (always works):</b> swap the CALENDARAUTO line for an explicit range.</p>
+    <pre data-lang="DAX · New table — Plan B with a fixed CALENDAR">⟦dateT⟧ =
+ADDCOLUMNS (
+    CALENDAR( DATE(2015,1,1), DATE(2025,12,31) ),
+    "Year", YEAR ( [Date] ),
+    "Month Name", FORMAT ( [Date], "mmmm" ),
+    "Month Number", MONTH ( [Date] ),
+    "Day", DAY( [Date] ),
+    "Day of Week", FORMAT ( [Date], "ddd" ),
+    "Day of Week No", WEEKDAY( [Date],2 )
+)</pre>
+    <pre data-lang="DAX · New table — Plan C: range from your data (full years)  · extra">⟦dateT⟧ =
+ADDCOLUMNS (
+    CALENDAR(
+        DATE( YEAR( MIN( ⟦t:fact⟧[⟦datecol⟧] ) ), 1, 1 ),
+        DATE( YEAR( MAX( ⟦t:fact⟧[⟦datecol⟧] ) ), 12, 31 )
+    ),
+    "Year", YEAR ( [Date] ),
+    "Month Name", FORMAT ( [Date], "mmmm" ),
+    "Month Number", MONTH ( [Date] ),
+    "Day", DAY( [Date] ),
+    "Day of Week", FORMAT ( [Date], "ddd" ),
+    "Day of Week No", WEEKDAY( [Date],2 )
+)</pre>
+  </div>
+
+  <div class="card">
+    <h3>Afterwards, ALWAYS (3 things)</h3>
+    <ol>
+      <li>Table selected → <span class="path">Table tools → Mark as date table</span> → <b>Date</b> column.<br>Without this DATEADD, SAMEPERIODLASTYEAR, TOTALYTD and the Forecast do not work.</li>
+      <li><b>Sort months:</b> click Month Name → <span class="path">Column tools → Sort by column → Month Number</span>. Same for Day of Week by Day of Week No.</li>
+      <li>Model view: relationship <b>Date[Date] → your date column</b> (1:*).</li>
+    </ol>
+    <div class="tip"><b>At the very end:</b> File → Options → Current File → Data Load → untick <b>Auto date/time</b> (once you are using your own Date table).</div>
+  </div>
+
+  <div class="card">
+    <h3>Why it fails and how to fix it</h3>
+    <div class="tablewrap"><table class="fix">
+      <tr><th>Error</th><th>Fix</th></tr>
+      <tr><td>CALENDARAUTO errors</td><td>It looks for Date/DateTime columns in the model; if there are none it fails. Create the table AFTER closing Power Query with the types set.</td></tr>
+      <tr><td>"cannot find a base column of DateTime type"</td><td>Some date column is ABC or 123. Set it to Date in Power Query.</td></tr>
+      <tr><td>Text date "2025-01" (no day)</td><td>Add Column → Custom: <code class="cp">Date.FromText([Reporting Date] &amp; "-01")</code> → Date type.</td></tr>
+      <tr><td>dd/mm/yyyy converts wrongly</td><td>Change Type → Using Locale → Date → English (United Kingdom).</td></tr>
+      <tr><td>Absurd range (1900–2050)</td><td>There is a stray date in some table. Use an explicit CALENDAR (Plan B or C).</td></tr>
+      <tr><td>The formula bar says "Date =" while creating a measure</td><td>Press <kbd>Esc</kbd>: you are overwriting the table.</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ 5 MODEL ============ -->
+<section id="model">
+  <header><span class="n">5</span><h2>Model — star schema</h2></header>
+  <p class="when"><b>When:</b> after the date table and before the measures. If measures show the same total on every bar, come back here.</p>
+
+  <div class="card">
+    <h3>Create relationships</h3>
+    <p>Model view. <b>Drag from the DIMENSION to the FACT.</b> Cardinality <b>One to many (1:*)</b> with the 1 on the dimension. Cross filter <b>Single</b>.</p>
+    <div class="tip"><b>Quick test:</b> a table visual with one dimension field + one measure. Do the values change per row? Then the relationship works.</div>
+  </div>
+
+  <div class="card">
+    <h3>Typical problems</h3>
+    <div class="tablewrap"><table class="fix">
+      <tr><th>Symptom</th><th>Cause and fix</th></tr>
+      <tr><td>All bars equal / same total repeated</td><td>THE RELATIONSHIP IS MISSING. Create it in Model view.</td></tr>
+      <tr><td>It rejects 1:* and proposes Many-to-many</td><td>The dimension has duplicate IDs. Remove them in Power Query. <b>NEVER accept many-to-many.</b></td></tr>
+      <tr><td>"Ambiguous paths between tables"</td><td>Untick <b>Make this relationship active</b> → it becomes a dotted line. That is correct.</td></tr>
+      <tr><td>It will not let you create the relationship</td><td>Different types (text vs number). Make them equal in Power Query.</td></tr>
+      <tr><td>(Blank) in slicers or charts</td><td>Fact rows with no match in the dimension. Filter on the visual: Advanced filtering → <b>is not blank</b>.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>Inactive relationship, to use it now and then</h3>
+    <pre data-lang="DAX · New measure — as in the notes">Sales by Release = CALCULATE([Total Sales],
+  USERELATIONSHIP('Date'[Date], Prod[Release Date]))</pre>
+    <p>Swap <code>Prod[Release Date]</code> for the date column on the dotted-line relationship. An adaptable version is in <a href="#relationships">Relationships</a>.</p>
+  </div>
+</section>
+
+<!-- ============ 6 RELATIONSHIPS ============ -->
+<section id="relationships">
+  <header><span class="n">6</span><h2>Relationships — which table goes to which</h2></header>
+  <p class="when"><b>When:</b> Model view, right after the Date table. One relationship per dimension, all pointing at the fact table.</p>
+
+  <div class="card">
+    <h3>The one rule</h3>
+    <p><b>The table where the key is UNIQUE (one row per ID) is the “1” side. The table where the key REPEATS is the “*” side.</b> The 1 side is the dimension (lookup); the * side is the fact (transactions). The filter arrow points from 1 to *.</p>
+    <div class="rel"><span class="one"><small>Dimension · key is unique · 1</small>product_sustainability[product_id]</span><span class="ar">1 ───▶ *</span><span class="many"><small>Fact · key repeats · *</small>orders[product_id]</span></div>
+    <div class="note"><b>“One to many (1:*)” and “Many to one (*:1)” are the same relationship.</b> The dialog just names it after whichever table is listed first. What matters: the <b>1</b> sits next to the dimension and Cross filter direction says <b>Single</b>.</div>
+  </div>
+
+  <div class="card">
+    <h3>Which one is the dimension? 10-second test</h3>
+    <ul>
+      <li><b>Row count:</b> the small table (35, 57, 95 rows) is the dimension; the big one (174, 9,000 rows) is the fact.</li>
+      <li><b>Uniqueness:</b> Power Query → click the key column → View → <b>Column distribution</b>. If it says <i>“95 distinct, 95 unique”</i> and the table has 95 rows, the key is unique → 1 side.</li>
+      <li><b>Find the offenders:</b> select the key column → Home → Keep Rows → <b>Keep Duplicates</b>. Empty result = unique. <b>Then delete that step</b> in Applied Steps.</li>
+      <li><b>Meaning:</b> does the table <i>describe</i> things (a product, a country, a cost centre, a day)? Dimension. Does it <i>record events or amounts</i> (orders, expenses)? Fact.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Relationship helper</h3>
+    <p>Fill this in for the two tables you want to connect and it tells you what to do.</p>
+    <div class="helper">
+      <label>Table A<input id="hA" value="product_sustainability" spellcheck="false"></label>
+      <label>Table B<input id="hB" value="orders" spellcheck="false"></label>
+      <label>Key column (same meaning in both)<input id="hK" value="product_id" spellcheck="false"></label>
+      <label>Same data type in both tables?<select id="hT"><option value="y">Yes</option><option value="n">No / not sure</option></select></label>
+      <label>Is the key unique in table A?<select id="hUA"><option value="y">Yes — one row per value</option><option value="n">No — values repeat</option></select></label>
+      <label>Is the key unique in table B?<select id="hUB"><option value="n">No — values repeat</option><option value="y">Yes — one row per value</option></select></label>
+    </div>
+    <div id="relOut"></div>
+  </div>
+
+  <div class="card">
+    <h3>Every case you can meet</h3>
+    <div class="tablewrap"><table>
+      <tr><th>Case</th><th>Which goes to which</th></tr>
+      <tr><td><b>Lookup → fact</b> (products, countries, cost centres)</td><td>lookup[key] <b>1 → *</b> fact[key]. Single. This is 90% of the exam.</td></tr>
+      <tr><td><b>Date table → fact</b></td><td>Date[Date] <b>1 → *</b> fact[date column]. The fact column must be type <b>Date</b> (not text, not Date/Time with hours — otherwise nothing matches).</td></tr>
+      <tr><td><b>Fact with two date columns</b> (order date + ship date)</td><td>Date[Date] → first date: <b>active</b>. Date[Date] → second date: <b>inactive</b> (dotted). Use it with USERELATIONSHIP (below).</td></tr>
+      <tr><td><b>Lookup that only covers some keys</b> (score for 95 of 150 products, audit for 35 of 57 centres)</td><td>Still lookup[key] <b>1 → *</b> fact[key]. The uncovered rows show as <b>(Blank)</b>. Expected: filter it out or comment on it.</td></tr>
+      <tr><td><b>Two fact tables</b> (actuals and budget kept separate)</td><td><b>Never fact ↔ fact.</b> Each shared dimension goes 1 → * to BOTH facts: Date → actuals, Date → budget, cost_centre → actuals, cost_centre → budget. (In Mock 2 you avoid this by merging them into Expenses.)</td></tr>
+      <tr><td><b>Lookup of a lookup</b> (region table → country table → orders)</td><td>region[region_id] <b>1 → *</b> country[region_id], then country[country] <b>1 → *</b> fact[country]. Simpler: Merge region into country in Power Query and keep one dimension.</td></tr>
+      <tr><td><b>Both tables unique</b> (cost_center_lookup and audit_review, one row per centre each)</td><td>Power BI proposes <b>1:1</b>. Better: connect each one separately to the fact (1 → *), or Merge them into a single dimension.</td></tr>
+      <tr><td><b>Neither table unique</b> → it proposes <b>Many-to-many</b></td><td>Do not accept. Either remove duplicates in the table that should be the dimension, or build a <b>bridge dimension</b>: right-click the fact query → Reference → keep only the key column → Remove Duplicates → connect it 1 → * to both tables.</td></tr>
+      <tr><td><b>Match needs two columns</b> (cost centre + category)</td><td>A relationship uses ONE column. Create the same key column in both tables in Power Query: <code class="cp">Text.From([a]) &amp; "|" &amp; Text.From([b])</code> → type Text → relate on it. (Or Merge the tables instead.)</td></tr>
+      <tr><td><b>_Measures table</b></td><td>No relationship at all. It stays on its own.</td></tr>
+    </table></div>
+    <pre data-lang="DAX · New measure — use the inactive (dotted) date relationship">⟦mSales⟧ by ⟦altdate⟧ = CALCULATE([⟦mSales⟧],
+  USERELATIONSHIP(⟦t:dateT⟧[Date], ⟦t:fact⟧[⟦altdate⟧]))</pre>
+  </div>
+
+  <div class="card">
+    <h3>The two mocks, drawn</h3>
+    <p><b>Mock 1 — TechCart</b> · fact: <code>orders</code></p>
+    <div class="rel"><span class="one">product_sustainability[product_id]</span><span class="ar">1 ───▶ *</span><span class="many">orders[product_id]</span></div>
+    <div class="rel"><span class="one">country_region_lookup[country_name]</span><span class="ar">1 ───▶ *</span><span class="many">orders[customer_country]</span></div>
+    <div class="rel"><span class="one">Date[Date]</span><span class="ar">1 ───▶ *</span><span class="many">orders[order_date]</span></div>
+    <p style="margin-top:16px"><b>Mock 2 — Meridian</b> · fact: <code>Expenses</code> (actuals merged with budget)</p>
+    <div class="rel"><span class="one">cost_center_lookup[cost_center_code]</span><span class="ar">1 ───▶ *</span><span class="many">Expenses[Cost Centre Code]</span></div>
+    <div class="rel"><span class="one">audit_governance_review[cost_center_code]</span><span class="ar">1 ───▶ *</span><span class="many">Expenses[Cost Centre Code]</span></div>
+    <div class="rel"><span class="one">Date[Date]</span><span class="ar">1 ───▶ *</span><span class="many">Expenses[Reporting Date]</span></div>
+    <div class="note"><b>The key columns do not need the same name</b> (country_name ↔ customer_country), only the same values and the same type.</div>
+  </div>
+
+  <div class="card">
+    <h3>Creating it, click by click</h3>
+    <ol>
+      <li><b>Fast way:</b> Model view → drag the key column from the dimension and drop it on the matching column of the fact.</li>
+      <li><b>Safe way:</b> <span class="path">Home → Manage relationships → New</span> → top dropdown: the dimension, click its key column → bottom dropdown: the fact, click its key column.</li>
+      <li>Check <b>Cardinality</b>: One to many (1:*) — or Many to one (*:1) if you listed the fact first.</li>
+      <li>Check <b>Cross filter direction: Single</b>.</li>
+      <li><b>Make this relationship active</b>: ticked (unless it is the second date relationship).</li>
+      <li>OK → in the diagram the <b>1</b> must sit next to the dimension and the <b>*</b> next to the fact.</li>
+      <li>Power BI may have auto-created relationships on load: open Manage relationships and delete any wrong one first.</li>
+    </ol>
+    <div class="tablewrap"><table class="fix">
+      <tr><th>Before you blame the relationship</th><th>Check</th></tr>
+      <tr><td>Keys are text vs number</td><td>Set the same type on both sides in Power Query.</td></tr>
+      <tr><td>Keys have stray spaces</td><td>Transform → Format → Trim (and Clean) on both sides.</td></tr>
+      <tr><td>Date key has a time part</td><td>Change type to Date (not Date/Time).</td></tr>
+      <tr><td>Blank row in the dimension key</td><td>Filter out null in the dimension, otherwise it counts as a duplicate/blank key.</td></tr>
+    </table></div>
+    <div class="tip"><b>Final test:</b> table visual with a dimension field + [your base measure]. Different value on each row = working. Same value everywhere = relationship missing or on the wrong column.</div>
+  </div>
+</section>
+
+<!-- ============ 7 MEASURES ============ -->
+<section id="measures">
+  <header><span class="n">7</span><h2>Measures</h2></header>
+  <p class="when"><b>When:</b> once relationships exist. Order: _Measures table → basics → count with a condition → ratios → time intelligence. Later ones use earlier ones, so paste them in this order.</p>
+
+  <div class="card">
+    <h3>First: the _Measures table</h3>
+    <ol>
+      <li><span class="path">Home → Enter data</span> → name <code class="cp">_Measures</code> → Load (empty table).</li>
+      <li><b>Select it</b> in the Data pane before every <span class="path">New measure</span>.</li>
+      <li>Paste ONE measure at a time and press Enter.</li>
+    </ol>
+    <div class="warn"><b>If the bar says "Date Table =" or "Date ="</b>, press <kbd>Esc</kbd>: you are overwriting the table, not creating a measure.</div>
+  </div>
+
+  <div class="card">
+    <h3>Basics</h3>
+    <pre data-lang="DAX · New measure">⟦mSales⟧ = SUMX(⟦t:fact⟧,
+   ⟦t:fact⟧[⟦qty⟧] * ⟦t:fact⟧[⟦price⟧])</pre>
+    <pre data-lang="DAX · New measure — with discount (Mock 1)">⟦mSales⟧ = SUMX(⟦t:fact⟧, ⟦t:fact⟧[⟦qty⟧] *
+  ⟦t:fact⟧[⟦price⟧] * (1 - ⟦t:fact⟧[⟦disc⟧]))</pre>
+    <pre data-lang="DAX · New measure — if you already have an amount column">⟦mSales⟧ = SUM(⟦t:fact⟧[⟦amount⟧])</pre>
+    <pre data-lang="DAX · New measure">Total Orders = DISTINCTCOUNT(⟦t:fact⟧[⟦orderid⟧])</pre>
+    <pre data-lang="DAX · New measure">Total Customers = DISTINCTCOUNT(⟦t:fact⟧[⟦custid⟧])</pre>
+    <pre data-lang="DAX · New measure">Total Quantity = SUM(⟦t:fact⟧[⟦qty⟧])</pre>
+    <pre data-lang="DAX · New measure">Average Rating = AVERAGE(⟦t:fact⟧[⟦rating⟧])</pre>
+    <pre data-lang="DAX · New measure">AOV = DIVIDE([⟦mSales⟧], [Total Orders])</pre>
+    <div class="note"><b>DISTINCTCOUNT, not COUNT:</b> one order spans several rows. <b>DIVIDE, not "/":</b> avoids the divide-by-zero error.</div>
+  </div>
+
+  <div class="card">
+    <h3>Count with a condition</h3>
+    <pre data-lang="DAX · New measure — TEXT condition">Num Returns = CALCULATE(COUNTROWS(⟦t:fact⟧),
+                ⟦t:fact⟧[⟦flagcol⟧] = ⟦v:flagval⟧)</pre>
+    <pre data-lang="DAX · New measure — NUMBER condition">Score⟦dimval⟧ = CALCULATE(COUNTROWS(⟦t:dim⟧), ⟦t:dim⟧[⟦dimcol⟧] = ⟦v:dimval⟧)</pre>
+    <div class="warn"><b>Numbers without quotes, text with quotes.</b> If you get 0 or blank, look at the column icon: Σ = number, ABC = text. (Here the quotes are added automatically from what you type in “My names”.)</div>
+  </div>
+
+  <div class="card">
+    <h3>Ratios and variance</h3>
+    <pre data-lang="DAX · New measure">Return Rate = DIVIDE([Num Returns], COUNTROWS(⟦t:fact⟧))</pre>
+    <pre data-lang="DAX · New measure">% of Total = DIVIDE([⟦mSales⟧],
+   CALCULATE([⟦mSales⟧], ALL(⟦t:fact⟧)))</pre>
+    <pre data-lang="DAX · New measure — % of Total that respects slicers  · extra">% of Selected = DIVIDE([⟦mSales⟧],
+   CALCULATE([⟦mSales⟧], ALLSELECTED()))</pre>
+    <pre data-lang="DAX · New measure — Mock 2">Total Actuals = SUM(⟦t:fact⟧[⟦actcol⟧])</pre>
+    <pre data-lang="DAX · New measure — Mock 2">Total Budget = SUM(⟦t:fact⟧[⟦budcol⟧])</pre>
+    <pre data-lang="DAX · New measure">Variance = [Total Actuals] - [Total Budget]</pre>
+    <pre data-lang="DAX · New measure">Variance % = DIVIDE([Variance], [Total Budget])</pre>
+  </div>
+
+  <div class="card">
+    <h3>Time intelligence</h3>
+    <div class="warn"><b>Requires</b> Mark as date table + the Date[Date] → your date relationship + using fields from the Date table in the visuals (not the date from the fact table).</div>
+    <pre data-lang="DAX · New measure">⟦mSales⟧ LY = CALCULATE([⟦mSales⟧],
+   SAMEPERIODLASTYEAR(⟦t:dateT⟧[Date]))</pre>
+    <pre data-lang="DAX · New measure">YoY % =
+VAR Cur = [⟦mSales⟧]
+VAR Prior = CALCULATE([⟦mSales⟧],
+   DATEADD(⟦t:dateT⟧[Date], -1, YEAR))
+RETURN DIVIDE(Cur - Prior, Prior)</pre>
+    <pre data-lang="DAX · New measure">⟦mSales⟧ YTD = TOTALYTD([⟦mSales⟧], ⟦t:dateT⟧[Date])</pre>
+    <pre data-lang="DAX · New measure — previous month  · extra">⟦mSales⟧ PM = CALCULATE([⟦mSales⟧],
+   DATEADD(⟦t:dateT⟧[Date], -1, MONTH))</pre>
+    <pre data-lang="DAX · New measure — month-on-month change  · extra">MoM % = DIVIDE([⟦mSales⟧] - [⟦mSales⟧ PM], [⟦mSales⟧ PM])</pre>
+  </div>
+
+  <div class="card">
+    <h3>Filter inside CALCULATE</h3>
+    <pre data-lang="DAX · New measure">High Score Sales = CALCULATE([⟦mSales⟧],
+   FILTER(⟦t:dim⟧, ⟦t:dim⟧[⟦dimcol⟧] &gt;= 2))</pre>
+    <pre data-lang="DAX · New measure — two conditions  · extra">⟦mSales⟧ Filtered = CALCULATE([⟦mSales⟧],
+   ⟦t:fact⟧[⟦flagcol⟧] = ⟦v:flagval⟧,
+   ⟦t:dim⟧[⟦dimcol⟧] &gt;= 2)</pre>
+  </div>
+
+  <div class="card">
+    <h3>Format</h3>
+    <p>Click the measure → <span class="path">Measure tools → Format</span> → Currency $ / Percentage, decimals. On cards: Format → Callout value → <b>Display units: Millions</b> (or Thousands).</p>
+  </div>
+</section>
+
+<!-- ============ 8 VISUALS ============ -->
+<section id="visuals">
+  <header><span class="n">8</span><h2>Visuals</h2></header>
+  <p class="when"><b>When:</b> once the measures exist. Build all the visuals for the 4 topics first; formatting comes later.</p>
+
+  <div class="card">
+    <h3>Which visual for what</h3>
+    <div class="tablewrap"><table>
+      <tr><th>I want to show</th><th>Visual and fields</th></tr>
+      <tr><td>Trend over time</td><td><b>Line chart.</b> X: Date[Month Name] · Legend: Date[Year]</td></tr>
+      <tr><td>Compare categories</td><td><b>Clustered bar</b> (horizontal)</td></tr>
+      <tr><td>Amount + % together</td><td><b>Line and clustered column.</b> Column y-axis: amount · Line y-axis: %</td></tr>
+      <tr><td>KPI</td><td><b>Card</b> / Multi-row card</td></tr>
+      <tr><td>Ranking</td><td><b>Bar + Top N filter</b></td></tr>
+      <tr><td>Cross two dimensions</td><td><b>Matrix</b> (Rows / Columns / Values)</td></tr>
+      <tr><td>Interactive breakdown</td><td><b>Decomposition tree</b> (Analyze: measure · Explain by: dimensions)</td></tr>
+      <tr><td>Geography</td><td><b>Filled map</b> (column → Column tools → Data category = Country)</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>The three mistakes that always happen</h3>
+    <p><b>1 · TOP N.</b> Filters on this visual → click the field (the text one: product, country…) → Filter type <b>Top N</b> → Top 10 → <b>By value: drag the MEASURE</b> → Apply filter.</p>
+    <div class="warn">If you drag the text field into By value it ranks by "First" and comes out wrong.</div>
+    <p><b>2 · INVISIBLE SECONDARY AXIS.</b> Format → <b>Secondary y-axis</b> → expand → Values → On. Without this the % line is squashed flat on the floor.</p>
+    <p><b>3 · SORTING.</b> Three dots (…) → Sort by → choose the field → <b>open it again</b> → Sort ascending/descending. It takes TWO passes. For chronological order pick the AXIS field, not the measure.</p>
+  </div>
+</section>
+
+<!-- ============ 9 OUTPUT ============ -->
+<section id="output">
+  <header><span class="n">9</span><h2>What "Output" asks for (scores points, gets forgotten)</h2></header>
+  <p class="when"><b>When:</b> once every visual exists. Keep the last 20–25 minutes for this.</p>
+
+  <div class="card">
+    <h3>Consistent theme</h3>
+    <p><span class="path">View → Themes → Customize current theme</span>. 4–5 colours, one font.</p>
+    <p><b>Background:</b> Format page → Canvas background, or a rectangle (Insert → Shapes) sent to the back with Format → Send backward → <b>Send to back</b>.</p>
+  </div>
+
+  <div class="card">
+    <h3>Slicer zone</h3>
+    <ul>
+      <li>Narrow column on the left with 2–3 slicers and a background rectangle.</li>
+      <li>Style: <b>Vertical list</b> / <b>Dropdown</b> (many values) / <b>Tile</b>.</li>
+      <li>Remove the label: Visual tab → <b>Slicer header → Off</b> (NOT "Title", which is under General).</li>
+      <li><span class="path">View → Sync slicers</span> so they filter both pages.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Page navigation</h3>
+    <p><span class="path">Insert → Buttons → Navigator → Page navigator</span>. It updates itself when you add pages. Copy it with <kbd>Ctrl</kbd>+<kbd>C</kbd> / <kbd>Ctrl</kbd>+<kbd>V</kbd> to the other page.</p>
+  </div>
+
+  <div class="card">
+    <h3>Bookmarks (asked for in Mock 1)</h3>
+    <ol>
+      <li><span class="path">View → Bookmarks</span> (and View → Selection to hide/show visuals).</li>
+      <li>Set the page the way you want it (filters, visible visual).</li>
+      <li><b>Add</b> → rename with a double-click.</li>
+      <li>Three dots on the bookmark → tick/untick <b>Data</b>, <b>Display</b>, <b>Current page</b>.</li>
+      <li><span class="path">Insert → Buttons → Blank</span> → Format → <b>Action</b> → Type: Bookmark → choose the bookmark.</li>
+    </ol>
+    <div class="tip"><b>Typical use:</b> two bookmarks that toggle two overlapping visuals (in Selection hide one, save a bookmark; hide the other, save the second). Untick Data if you do not want the bookmark to reset the slicers. In Desktop, buttons are tested with <kbd>Ctrl</kbd>+click.</div>
+  </div>
+
+  <div class="card">
+    <h3>Formatting each visual</h3>
+    <ul>
+      <li><b>Rewritten title</b> (never "Sum of Price by Category") · Subtitle under General.</li>
+      <li>Data labels <b>On</b> for bars, <b>Off</b> for lines with many points.</li>
+      <li>Effects → Visual border On, Rounded corners 8.</li>
+      <li><b>Format painter</b> (Home) to copy formatting from one visual to another.</li>
+      <li><kbd>Ctrl</kbd>+click several → Format → <b>Align</b>.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Captions</h3>
+    <p>Small text box, grey, italic, under the key visuals. A <b>CONCLUSION, not a description.</b></p>
+    <div class="tip"><b>✔</b> "Two products account for 40% of revenue"</div>
+    <div class="warn"><b>✘</b> "Chart of sales by product"</div>
+  </div>
+</section>
+
+<!-- ============ MOCK 1 ============ -->
+<section id="mock1">
+  <header><span class="n">M1</span><h2>Mock 1 — TechCart Global (9,000 rows)</h2></header>
+  <p class="when"><b>Tables:</b> orders + product_sustainability (95 rows) + country_region_lookup (35 countries). Press the <b>Mock 1</b> preset in “My names”.</p>
+
+  <div class="card">
+    <h3>Cleaning</h3>
+    <ul>
+      <li><b>DO THIS FIRST:</b> unit_price arrives as "USD 94.70" → Replace <code class="cp">USD </code> → nothing → Decimal Number.</li>
+      <li>order_date format 2019-11-16 → Date type directly.</li>
+      <li>Nulls: customer_rating 15%, discount_pct 12%, payment_method and customer_country 1%.</li>
+    </ul>
+    <div class="warn"><b>Do NOT delete customer_rating:</b> you are asked to analyse ratings. The candidate for deletion is discount_pct (if you delete it, use the sales measure WITHOUT discount).</div>
+  </div>
+
+  <div class="card">
+    <h3>Relationships</h3>
+    <div class="rel"><span class="one">product_sustainability[product_id]</span><span class="ar">1 ───▶ *</span><span class="many">orders[product_id]</span></div>
+    <div class="rel"><span class="one">country_region_lookup[country_name]</span><span class="ar">1 ───▶ *</span><span class="many">orders[customer_country]</span></div>
+    <div class="rel"><span class="one">Date[Date]</span><span class="ar">1 ───▶ *</span><span class="many">orders[order_date]</span></div>
+    <div class="note">Only 95 of 150 products have a score → <b>(Blank) expected</b> in the sustainability visuals. Filter it out (is not blank) or comment on it.</div>
+  </div>
+
+  <div class="card">
+    <h3>Sales measure with discount</h3>
+    <pre data-lang="DAX · New measure — exactly as in Mock 1">Total Sales = SUMX(orders, orders[quantity] *
+  orders[unit_price] * (1 - orders[discount_pct]))</pre>
+  </div>
+
+  <div class="card">
+    <h3>The 4 topics</h3>
+    <ol>
+      <li>Order trend over time → line chart (Month Name / Year) with Total Orders or Total Sales.</li>
+      <li>Insights from the sustainability score → bars by score, Score3, High Score Sales.</li>
+      <li>Average ratings → Average Rating by category / country.</li>
+      <li>Deep dive on one product → filtered table + cards: sales, average rating, number of returns, score.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ MOCK 2 ============ -->
+<section id="mock2">
+  <header><span class="n">M2</span><h2>Mock 2 — Meridian Group (FP&amp;A)</h2></header>
+  <p class="when"><b>Tables:</b> actuals_2025 (174) + budget_2025 (172) + cost_center_lookup (57) + audit_governance_review (35). Press the <b>Mock 2</b> preset in “My names”.</p>
+
+  <div class="card">
+    <h3>Step by step in Power Query</h3>
+    <ol>
+      <li>The 12 months are COLUMNS (2025-01 … 2025-12). In <b>actuals</b>: select cost_center_code, cost_category, currency, currency_rate_to_usd → right-click → <b>Unpivot Other Columns</b>.</li>
+      <li>Rename Attribute → <code class="cp">Reporting Date</code>, Value → amount.</li>
+      <li>Reporting Date is TEXT "2025-01" → Custom Column with the formula below → <b>Date</b> type. Without this CALENDARAUTO fails.</li>
+      <li>To USD: Custom Column amount × currency_rate_to_usd → Decimal Number → rename <code class="cp">Actuals ($)</code>.</li>
+      <li>Repeat 1–4 in <b>budget</b> → <code class="cp">Budget ($)</code>.</li>
+      <li><b>Expenses table:</b> <a href="#combine">Merge Queries as New</a> (actuals on top, budget below) on cost_center_code + cost_category + Reporting Date (<kbd>Ctrl</kbd> for several columns, same order) → Left Outer → expand only Budget ($) without prefix.</li>
+      <li>Final columns: Cost Centre Code, Cost Category, Reporting Date, Actuals ($), Budget ($).</li>
+      <li>Enable load off on actuals and budget.</li>
+    </ol>
+    <pre data-lang="M · Custom Column — date">Date.FromText([Reporting Date] &amp; "-01")</pre>
+    <pre data-lang="M · Custom Column — to USD">[Amount] * [currency_rate_to_usd]</pre>
+    <div class="note">Actuals has 2 more rows than budget → after the merge there will be <b>nulls in Budget</b>. Do not delete them, comment on it.</div>
+  </div>
+
+  <div class="card">
+    <h3>Relationships</h3>
+    <div class="rel"><span class="one">cost_center_lookup[cost_center_code]</span><span class="ar">1 ───▶ *</span><span class="many">Expenses[Cost Centre Code]</span></div>
+    <div class="rel"><span class="one">audit_governance_review[cost_center_code]</span><span class="ar">1 ───▶ *</span><span class="many">Expenses[Cost Centre Code]</span></div>
+    <div class="rel"><span class="one">Date[Date]</span><span class="ar">1 ───▶ *</span><span class="many">Expenses[Reporting Date]</span></div>
+    <div class="note">Only 35 of 57 centres have a governance score → <b>(Blank) expected</b>.</div>
+  </div>
+
+  <div class="card">
+    <h3>Key measures and status column</h3>
+    <pre data-lang="DAX · New measure">Total Actuals = SUM(Expenses[Actuals ($)])</pre>
+    <pre data-lang="DAX · New measure">Total Budget = SUM(Expenses[Budget ($)])</pre>
+    <pre data-lang="DAX · New measure">Variance = [Total Actuals] - [Total Budget]</pre>
+    <pre data-lang="DAX · New measure">Variance % = DIVIDE([Variance], [Total Budget])</pre>
+    <p>Status column in Power Query: first the <b>Variance</b> column (Decimal Number), then <b>Status</b> (Text).</p>
+    <pre data-lang="M · Custom Column — Variance">[#"Actuals ($)"] - [#"Budget ($)"]</pre>
+    <pre data-lang="M · Custom Column — Status">if [Variance] &lt; 0 then "Miss" else "Meet"</pre>
+    <div class="warn"><b>Names with symbols</b> such as <code>Actuals ($)</code> are written in M as <code>[#"Actuals ($)"]</code>. Double-clicking the column list inserts it correctly. If Budget is null, Variance is null and the <code>if</code> errors: use the "with nulls" version in <a href="#columns">New columns</a>.</div>
+  </div>
+
+  <div class="card">
+    <h3>The 4 topics</h3>
+    <ol>
+      <li>Budget vs actual over time → line / combo with Total Actuals and Total Budget by Month Name.</li>
+      <li>What the governance score shows → Variance % by score.</li>
+      <li>Variance by region and country → bars / matrix / filled map from cost_center_lookup.</li>
+      <li>Deep dive on one cost centre → slicer or filter + cards + table.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ CHECKLIST ============ -->
+<section id="checklist">
+  <header><span class="n">✓</span><h2>Final checklist (5 min before handing in)</h2></header>
+  <div class="card check">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+      <b id="prog-txt">0 / 15</b><button class="btn" id="resetCheck">Reset</button>
+    </div>
+    <div class="progress"><i id="prog"></i></div>
+    <label><input type="checkbox"><span>Correct types: no money column left as ABC</span></label>
+    <label><input type="checkbox"><span>Date table created AND marked with Mark as date table</span></label>
+    <label><input type="checkbox"><span>Relationships 1:* single — test: table with dimension + measure, do the values change?</span></label>
+    <label><input type="checkbox"><span>Enable load turned off on source queries</span></label>
+    <label><input type="checkbox"><span>Only the columns I use (the brief asks for it)</span></label>
+    <label><input type="checkbox"><span>Every title rewritten</span></label>
+    <label><input type="checkbox"><span>Data labels on bars and columns</span></label>
+    <label><input type="checkbox"><span>Secondary axis visible on combo charts</span></label>
+    <label><input type="checkbox"><span>Chronological order on time axes</span></label>
+    <label><input type="checkbox"><span>Page navigator on EVERY page</span></label>
+    <label><input type="checkbox"><span>Bookmarks (Mock 1)</span></label>
+    <label><input type="checkbox"><span>Slicers in their own zone with a consistent style</span></label>
+    <label><input type="checkbox"><span>$ and % format on measures</span></label>
+    <label><input type="checkbox"><span>1–2 captions with conclusions</span></label>
+    <label><input type="checkbox"><span>Same theme/colours/font on both pages</span></label>
+  </div>
+</section>
+
+<!-- ============ SYNTAX ============ -->
+<section id="syntax">
+  <header><span class="n">ƒ</span><h2>Quick syntax and shortcuts</h2></header>
+
+  <div class="card">
+    <h3>Power Query (M language) — Custom Column</h3>
+    <div class="tablewrap"><table>
+      <tr><th>Formula (click to copy)</th><th>What it does</th></tr>
+      <tr><td><code class="cp">[a] * [b]</code></td><td>multiply</td></tr>
+      <tr><td><code class="cp">[a] &amp; " " &amp; [b]</code></td><td>join text</td></tr>
+      <tr><td><code class="cp">#date([Year], 12, 31)</code></td><td>date from a year</td></tr>
+      <tr><td><code class="cp">Date.FromText([col])</code></td><td>text → date</td></tr>
+      <tr><td><code class="cp">Date.Year([col])</code></td><td>extract the year</td></tr>
+      <tr><td><code class="cp">Text.Trim([col])</code></td><td>remove spaces</td></tr>
+      <tr><td><code class="cp">if [x] &lt; 10 then "A" else if [x] &lt; 20 then "B" else "C"</code></td><td>conditional</td></tr>
+    </table></div>
+    <div class="note">M's <code>if/then/else</code> is lowercase and always needs <code>else</code>. In DAX it is <code>IF()</code> in capitals.</div>
+  </div>
+
+  <div class="card">
+    <h3>Shortcuts that save time</h3>
+    <ul>
+      <li><kbd>Ctrl</kbd>+<kbd>C</kbd> / <kbd>Ctrl</kbd>+<kbd>V</kbd> on a visual → duplicates it with all its formatting and filters.</li>
+      <li>Format painter (Home) → copies formatting from one visual to another.</li>
+      <li>View → Selection → select covered visuals and reorder layers.</li>
+      <li>View → Column quality / Column distribution in Power Query → see nulls and errors at a glance.</li>
+      <li>File → Options → Current File → Data Load → untick Auto date/time (at the end, once you use your own Date table).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>If something breaks and time is short</h3>
+    <p>Make sure everything is present, even unpolished. A missing part scores zero; a part that is there with a default title scores almost everything.</p>
+  </div>
+</section>
+
+<!-- ============ MESSAGES ============ -->
+<section id="messages">
+  <header><span class="n">✉</span><h2>Messages — send the exercise to Claude</h2></header>
+  <p class="when"><b>How it works:</b> drop the exercise brief and the data files, press Send, and Claude returns the full walkthrough (cleaning → relationships → measures → visuals) with your real table and column names and code to paste.</p>
+
+  <div class="card hidden" id="keyWarn">
+    <h3>API key needed</h3>
+    <ol>
+      <li>Create a key at <b>console.anthropic.com</b> → API keys (API usage is billed separately from a Claude subscription).</li>
+      <li>Open the file <code>.env</code> in this folder with Notepad and paste the key right after <code>ANTHROPIC_API_KEY=</code></li>
+      <li>Save, close the black server window and run <code>start.bat</code> again.</li>
+    </ol>
+    <div class="note"><b>The key never leaves your computer's server</b> — the browser never sees it. Do not share the .env file.</div>
+  </div>
+
+  <div id="log"></div>
+
+  <div class="card">
+    <div id="drop" tabindex="0" role="button"><b>Drop files here</b> or click to choose<br><small>PDF · Word (.docx) · Excel (.xlsx) · CSV · text · screenshots (PNG/JPG). A .pbix cannot be read — send screenshots of it.</small></div>
+    <input type="file" id="fileInput" multiple class="hidden" accept=".pdf,.docx,.xlsx,.xlsm,.csv,.tsv,.txt,.md,.json,.png,.jpg,.jpeg,.gif,.webp">
+    <div id="chips"></div>
+    <textarea id="ask" placeholder="What do you need? e.g. “Solve this exercise step by step”, or paste a DAX error…"></textarea>
+    <div class="quick">
+      <button class="btn" data-q="Solve the whole exercise step by step, in exam order, with everything I need to paste.">Solve it all step by step</button>
+      <button class="btn" data-q="Give me only the Power Query cleaning steps for these files, in order, with the traps you can see.">Cleaning steps only</button>
+      <button class="btn" data-q="Which relationships do I need? For each one tell me which table[column] is the 1 side, which is the * side, and why.">Which relationships?</button>
+      <button class="btn" data-q="Write every measure I need for the topics in the brief, one per code block, in the order I should create them.">All the measures</button>
+      <button class="btn" data-q="For each topic in the brief: which visual, which fields in each well, and a caption with a conclusion.">Visuals per topic</button>
+    </div>
+    <div class="sendrow">
+      <button class="btn primary" id="send">Send</button>
+      <button class="btn hidden" id="stop">Stop</button>
+      <button class="btn" id="newChat">New conversation</button>
+      <small><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to send · data files are sent as header + first 60 rows</small>
+    </div>
+  </div>
+</section>
+
+<div id="empty" class="hidden">Nothing matches the search.</div>
+</main>
+
+<!-- ============ MY NAMES ============ -->
+<aside class="adapt" id="adapt">
+  <h2>My names</h2>
+  <p>Type the names from YOUR exercise. All the yellow code updates and copies already adapted.</p>
+  <div class="presets">
+    <button class="btn" data-preset="base">Notes</button>
+    <button class="btn" data-preset="mock1">Mock 1</button>
+    <button class="btn" data-preset="mock2">Mock 2</button>
+  </div>
+  <div id="fields"></div>
+</aside>
+
+</div>
+
+<script>
+(function(){
+  // ---------- adaptable names ----------
+  var GROUPS = [
+    ['Fact table', [
+      ['fact','Table','Orders'],
+      ['qty','Quantity','quantity'],
+      ['price','Unit price','unit_price'],
+      ['disc','Discount','discount_pct'],
+      ['amount','Amount (if it exists)','Amount'],
+      ['rate','Exchange rate','currency_rate_to_usd'],
+      ['orderid','Order ID','order_id'],
+      ['custid','Customer ID','cust_id'],
+      ['rating','Rating','customer_rating'],
+      ['datecol','Date column','order_date'],
+      ['altdate','2nd date column','ship_date']
+    ]],
+    ['Conditions', [
+      ['flagcol','Text column','return_flag'],
+      ['flagval','Value to find','Yes'],
+      ['dim','Dimension table','Sus'],
+      ['dimcol','Dimension column','score'],
+      ['dimval','Value to find','3']
+    ]],
+    ['Measures and dates', [
+      ['mSales','Base measure','Total Sales'],
+      ['dateT','Date table','Date'],
+      ['actcol','Actuals column','Actuals ($)'],
+      ['budcol','Budget column','Budget ($)']
+    ]],
+    ['New column', [
+      ['newcol','New column name','Band'],
+      ['basecol','Column I test','unit_price'],
+      ['newval','Value to count','High']
+    ]],
+    ['Append / Merge', [
+      ['qa','Query 1','Actuals'],
+      ['qb','Query 2','Budget'],
+      ['key','Key column','cost_center_code']
+    ]]
+  ];
+  var DEFAULTS = {}, LABELS = {};
+  GROUPS.forEach(function(g){ g[1].forEach(function(f){ DEFAULTS[f[0]] = f[2]; LABELS[f[0]] = f[1]; }); });
+  var PRESETS = {
+    base: {},
+    mock1: { fact:'orders', dim:'product_sustainability', dimcol:'score', newcol:'Price Band', basecol:'unit_price',
+             qa:'orders', qb:'country_region_lookup', key:'customer_country' },
+    mock2: { fact:'Expenses', amount:'Actuals ($)', datecol:'Reporting Date', mSales:'Total Actuals',
+             dim:'audit_governance_review', dimcol:'score', newcol:'Status', basecol:'Variance', newval:'Miss',
+             qa:'Actuals', qb:'Budget', key:'cost_center_code' }
+  };
+
+  function load(k, fb){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; }catch(e){ return fb; } }
+  function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+  var vals = Object.assign({}, DEFAULTS, load('pbi.vals.en', {}));
+
+  // ---------- context-aware formatting ----------
+  var RESERVED = /^(date|calendar|table|time|year|month|day|currency|values|filter|all)$/i;
+  function fmt(kind, v){
+    v = (v == null || v === '') ? '?' : String(v);
+    if (kind === 't') return (/^[A-Za-z_][A-Za-z0-9_]*$/.test(v) && !RESERVED.test(v)) ? v : "'" + v.replace(/'/g, "''") + "'";
+    if (kind === 'm') return /^[A-Za-z_][A-Za-z0-9_ .]*$/.test(v) ? '[' + v + ']' : '[#"' + v.replace(/"/g,'""') + '"]';
+    if (kind === 'q') return /^[A-Za-z_][A-Za-z0-9_.]*$/.test(v) ? v : '#"' + v.replace(/"/g,'""') + '"';
+    if (kind === 'v') return /^-?\d+([.,]\d+)?$/.test(v.trim()) ? v.trim().replace(',', '.') : '"' + v.replace(/"/g,'""') + '"';
+    return v;
+  }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  var RE = /⟦(?:([tmqv]):)?([A-Za-z]+)⟧/g;
+
+  // ---------- snippets ----------
+  var snippets = [];
+  function mount(pre, adaptable){
+    var tpl = pre.textContent;
+    var wrap = document.createElement('div'); wrap.className = 'snip';
+    var head = document.createElement('div'); head.className = 'snip-head';
+    var lang = document.createElement('span'); lang.textContent = pre.getAttribute('data-lang') || 'code';
+    var btn = document.createElement('button'); btn.className = 'copy'; btn.type = 'button'; btn.textContent = 'Copy';
+    head.appendChild(lang); head.appendChild(btn);
+    pre.parentNode.insertBefore(wrap, pre);
+    wrap.appendChild(head); wrap.appendChild(pre);
+    btn.addEventListener('click', function(){ copy(pre.textContent, btn); });
+    if (!adaptable) return;
+    var keys = [];
+    tpl.replace(RE, function(m, k, key){ if (keys.indexOf(key) < 0) keys.push(key); return m; });
+    if (keys.length){
+      var uses = document.createElement('div'); uses.className = 'uses';
+      uses.appendChild(document.createTextNode('Change:'));
+      keys.forEach(function(key){
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = LABELS[key] || key;
+        b.addEventListener('click', function(){ focusField(key); });
+        uses.appendChild(b);
+      });
+      wrap.appendChild(uses);
+    }
+    pre.addEventListener('click', function(e){
+      var k = e.target && e.target.getAttribute && e.target.getAttribute('data-key');
+      if (k) focusField(k);
+    });
+    snippets.push({ pre: pre, tpl: tpl });
+  }
+  document.querySelectorAll('main pre[data-lang]').forEach(function(pre){ mount(pre, true); });
+
+  function render(){
+    snippets.forEach(function(s){
+      var out = '', last = 0;
+      s.tpl.replace(RE, function(m, kind, key, idx){
+        out += esc(s.tpl.slice(last, idx));
+        out += '<span class="var" data-key="' + key + '" title="' + esc(LABELS[key] || key) + '">' + esc(fmt(kind, vals[key])) + '</span>';
+        last = idx + m.length;
+        return m;
+      });
+      out += esc(s.tpl.slice(last));
+      s.pre.innerHTML = out;
+    });
+  }
+
+  // ---------- copy ----------
+  function copy(text, btn){
+    function done(){
+      if (!btn) return;
+      var old = btn.textContent; btn.textContent = 'Copied ✓'; btn.classList.add('ok');
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove('ok'); }, 1300);
+    }
+    function fallback(){
+      var ta = document.createElement('textarea'); ta.value = text;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); }catch(e){}
+      document.body.removeChild(ta); done();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else fallback();
+  }
+  document.addEventListener('click', function(e){
+    var c = e.target.closest && e.target.closest('code.cp');
+    if (!c) return;
+    copy(c.textContent);
+    var old = c.style.background; c.style.background = 'var(--green-soft)';
+    setTimeout(function(){ c.style.background = old; }, 700);
+  });
+  document.querySelectorAll('code.cp').forEach(function(c){ c.title = 'Click to copy'; });
+
+  // ---------- My names panel ----------
+  var fieldsEl = document.getElementById('fields'), inputs = {};
+  GROUPS.forEach(function(g){
+    var fs = document.createElement('fieldset');
+    var lg = document.createElement('legend'); lg.textContent = g[0]; fs.appendChild(lg);
+    g[1].forEach(function(f){
+      var lab = document.createElement('label');
+      var sp = document.createElement('span'); sp.textContent = f[1];
+      var inp = document.createElement('input'); inp.type = 'text'; inp.value = vals[f[0]]; inp.spellcheck = false;
+      inp.addEventListener('input', function(){ vals[f[0]] = inp.value; save('pbi.vals.en', vals); render(); });
+      lab.appendChild(sp); lab.appendChild(inp); fs.appendChild(lab);
+      inputs[f[0]] = inp;
+    });
+    fieldsEl.appendChild(fs);
+  });
+  var adapt = document.getElementById('adapt');
+  function focusField(key){
+    var inp = inputs[key]; if (!inp) return;
+    adapt.classList.add('open');
+    inp.scrollIntoView({ block: 'center' });
+    inp.focus(); inp.select();
+    inp.classList.add('flash'); setTimeout(function(){ inp.classList.remove('flash'); }, 900);
+  }
+  document.getElementById('toggleAdapt').addEventListener('click', function(){ adapt.classList.toggle('open'); });
+  document.querySelectorAll('[data-preset]').forEach(function(b){
+    b.addEventListener('click', function(){
+      vals = Object.assign({}, DEFAULTS, PRESETS[b.getAttribute('data-preset')]);
+      Object.keys(inputs).forEach(function(k){ inputs[k].value = vals[k]; });
+      save('pbi.vals.en', vals); render();
+    });
+  });
+
+  // ---------- relationship helper ----------
+  var hEls = ['hA','hB','hK','hT','hUA','hUB'].map(function(id){ return document.getElementById(id); });
+  function relLine(one, many, key){
+    return '<div class="rel"><span class="one"><small>1 side · dimension</small>' + esc(one) + '[' + esc(key) + ']</span><span class="ar">1 ───▶ *</span><span class="many"><small>* side · fact</small>' + esc(many) + '[' + esc(key) + ']</span></div>';
+  }
+  function helper(){
+    var A = hEls[0].value || 'Table A', B = hEls[1].value || 'Table B', K = hEls[2].value || 'key';
+    var sameType = hEls[3].value === 'y', uA = hEls[4].value === 'y', uB = hEls[5].value === 'y', html = '';
+    if (!sameType) html += '<div class="warn"><b>Fix the type first:</b> in Power Query set ' + esc(K) + ' to the same type (both Text or both Whole Number) in ' + esc(A) + ' and ' + esc(B) + ', and Trim it. Otherwise the relationship will not be created or will match nothing.</div>';
+    if (uA && !uB) html += relLine(A, B, K) + '<div class="tip"><b>' + esc(A) + ' is the dimension, ' + esc(B) + ' is the fact.</b> Drag ' + esc(A) + '[' + esc(K) + '] onto ' + esc(B) + '[' + esc(K) + ']. Cardinality One to many (1:*), Cross filter Single, active.</div>';
+    else if (!uA && uB) html += relLine(B, A, K) + '<div class="tip"><b>' + esc(B) + ' is the dimension, ' + esc(A) + ' is the fact.</b> Drag ' + esc(B) + '[' + esc(K) + '] onto ' + esc(A) + '[' + esc(K) + ']. Cardinality One to many (1:*), Cross filter Single, active.</div>';
+    else if (uA && uB) html += '<div class="note"><b>Both unique → Power BI proposes One to one (1:1).</b> These are two dimensions about the same thing. Best: connect EACH of them to the fact table with its own 1 → * relationship, or Merge them into one dimension in Power Query. Only keep the 1:1 if there is no fact table between them.</div>';
+    else html += '<div class="warn"><b>Neither is unique → Power BI proposes Many-to-many. Do not accept it.</b> Decide which table should be the dimension and remove its duplicates (select only ' + esc(K) + ' → Remove Duplicates). If both are genuinely facts, build a bridge: right-click one query → Reference → keep only ' + esc(K) + ' → Remove Duplicates → relate that new table 1 → * to both.</div>';
+    document.getElementById('relOut').innerHTML = html;
+  }
+  hEls.forEach(function(el){ el.addEventListener('input', helper); });
+
+  // ---------- checklist ----------
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.check input'));
+  var state = load('pbi.check', []);
+  function prog(){
+    var n = boxes.filter(function(b){ return b.checked; }).length;
+    document.getElementById('prog').style.width = (100 * n / boxes.length) + '%';
+    document.getElementById('prog-txt').textContent = n + ' / ' + boxes.length;
+  }
+  boxes.forEach(function(b, i){
+    b.checked = !!state[i];
+    b.addEventListener('change', function(){ save('pbi.check', boxes.map(function(x){ return x.checked; })); prog(); });
+  });
+  document.getElementById('resetCheck').addEventListener('click', function(){
+    boxes.forEach(function(b){ b.checked = false; }); save('pbi.check', []); prog();
+  });
+
+  // ---------- search ----------
+  var q = document.getElementById('q');
+  function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  function search(){
+    var words = norm(q.value).split(/\s+/).filter(Boolean), any = false;
+    document.querySelectorAll('main section').forEach(function(sec){
+      if (sec.id === 'messages'){ any = any || !words.length; return; }
+      var head = norm((sec.querySelector('h2,h1') || sec).textContent), vis = 0;
+      sec.querySelectorAll('.card').forEach(function(card){
+        var t = head + ' ' + norm(card.textContent);
+        var ok = words.every(function(w){ return t.indexOf(w) >= 0; });
+        card.classList.toggle('hidden', !ok); if (ok) vis++;
+      });
+      sec.classList.toggle('hidden', vis === 0); if (vis) any = true;
+    });
+    document.getElementById('messages').classList.toggle('hidden', words.length > 0);
+    document.getElementById('empty').classList.toggle('hidden', any);
+  }
+  q.addEventListener('input', search);
+  document.addEventListener('keydown', function(e){
+    if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){ e.preventDefault(); q.focus(); q.select(); }
+    if (e.key === 'Escape'){ if (document.activeElement === q){ q.value = ''; search(); q.blur(); } adapt.classList.remove('open'); }
+  });
+
+  // ---------- active nav ----------
+  var links = {};
+  document.querySelectorAll('#nav a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){
+          Object.keys(links).forEach(function(k){ links[k].classList.remove('on'); });
+          if (links[en.target.id]) links[en.target.id].classList.add('on');
+        }
+      });
+    }, { rootMargin: '-80px 0px -70% 0px' });
+    document.querySelectorAll('main section').forEach(function(s){ io.observe(s); });
+  }
+
+  // ---------- Messages (Claude) ----------
+  var logEl = document.getElementById('log'), ask = document.getElementById('ask'), chips = document.getElementById('chips');
+  var sendBtn = document.getElementById('send'), stopBtn = document.getElementById('stop');
+  var drop = document.getElementById('drop'), fileInput = document.getElementById('fileInput');
+  var pending = [], convo = [], controller = null;
+  var MAX_TOTAL = 30 * 1024 * 1024;
+
+  function inline(s){
+    return esc(s)
+      .replace(/`([^`]+)`/g, '<code class="cp" title="Click to copy">$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+      .replace(/(^|[\s(])\*([^*\s][^*]*)\*(?=[\s).,;:!?]|$)/g, '$1<i>$2</i>');
+  }
+  function md(src){
+    var lines = src.split('\n'), out = [], para = [], list = null, i = 0;
+    function flushPara(){ if (para.length){ out.push('<p>' + inline(para.join(' ')) + '</p>'); para = []; } }
+    function flushList(){
+      if (!list) return;
+      out.push('<' + list.tag + '>' + list.items.map(function(it){
+        return '<li' + (it.n ? ' value="' + it.n + '"' : '') + '>' + inline(it.t) + '</li>';
+      }).join('') + '</' + list.tag + '>');
+      list = null;
+    }
+    while (i < lines.length){
+      var l = lines[i], m;
+      if ((m = l.match(/^\s*```\s*([\w+-]*)/))){
+        flushPara(); flushList();
+        var code = []; i++;
+        while (i < lines.length && !/^\s*```/.test(lines[i])){ code.push(lines[i]); i++; }
+        i++;
+        var label = { dax: 'DAX', m: 'M · Power Query', powerquery: 'M · Power Query', pq: 'M · Power Query' }[m[1].toLowerCase()] || (m[1] || 'code');
+        out.push('<pre data-lang="' + esc(label) + '">' + esc(code.join('\n')) + '</pre>');
+        continue;
+      }
+      if ((m = l.match(/^(#{1,6})\s+(.*)$/))){ flushPara(); flushList(); out.push((m[1].length <= 2 ? '<h3>' : '<h4>') + inline(m[2]) + (m[1].length <= 2 ? '</h3>' : '</h4>')); }
+      else if (/^\s*(-{3,}|\*{3,})\s*$/.test(l)){ flushPara(); flushList(); out.push('<hr>'); }
+      else if ((m = l.match(/^\s*(\d+)[.)]\s+(.*)$/))){ flushPara(); if (!list || list.tag !== 'ol'){ flushList(); list = { tag: 'ol', items: [] }; } list.items.push({ n: m[1], t: m[2] }); }
+      else if ((m = l.match(/^\s*[-*•]\s+(.*)$/))){ flushPara(); if (!list || list.tag !== 'ul'){ flushList(); list = { tag: 'ul', items: [] }; } list.items.push({ t: m[1] }); }
+      else if (!l.trim()){ flushPara(); flushList(); }
+      else if (list && /^\s{2,}\S/.test(l)){ list.items[list.items.length - 1].t += ' ' + l.trim(); }
+      else { flushList(); para.push(l.trim()); }
+      i++;
+    }
+    flushPara(); flushList();
+    return out.join('');
+  }
+  function addMsg(role, html){
+    var d = document.createElement('div'); d.className = 'msg ' + role;
+    var who = document.createElement('div'); who.className = 'who'; who.textContent = role === 'user' ? 'You' : 'Claude';
+    var body = document.createElement('div'); body.innerHTML = html;
+    d.appendChild(who); d.appendChild(body); logEl.appendChild(d);
+    return body;
+  }
+  function paint(body, text){
+    body.innerHTML = md(text);
+    body.querySelectorAll('pre[data-lang]').forEach(function(p){ mount(p, false); });
+  }
+
+  function renderChips(){
+    chips.innerHTML = '';
+    pending.forEach(function(f, idx){
+      var c = document.createElement('span'); c.className = 'chip';
+      c.appendChild(document.createTextNode(f.name + ' · ' + (f.size > 1048576 ? (f.size / 1048576).toFixed(1) + ' MB' : Math.ceil(f.size / 1024) + ' KB')));
+      var x = document.createElement('button'); x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Remove ' + f.name);
+      x.addEventListener('click', function(){ pending.splice(idx, 1); renderChips(); });
+      c.appendChild(x); chips.appendChild(c);
+    });
+  }
+  function addFiles(list){
+    Array.prototype.forEach.call(list, function(file){
+      var total = pending.reduce(function(a, f){ return a + f.size; }, 0);
+      if (total + file.size > MAX_TOTAL){ addMsg('assistant err', '<p>“' + esc(file.name) + '” was not added: the files together go over 30 MB.</p>'); return; }
+      var r = new FileReader();
+      r.onload = function(){ pending.push({ name: file.name, size: file.size, data: String(r.result).split(',')[1] || '' }); renderChips(); };
+      r.readAsDataURL(file);
+    });
+  }
+  drop.addEventListener('click', function(){ fileInput.click(); });
+  drop.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); fileInput.click(); } });
+  fileInput.addEventListener('change', function(){ addFiles(fileInput.files); fileInput.value = ''; });
+  ['dragenter','dragover'].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.add('over'); }); });
+  ['dragleave','drop'].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.remove('over'); }); });
+  drop.addEventListener('drop', function(e){ if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files); });
+  document.querySelectorAll('[data-q]').forEach(function(b){
+    b.addEventListener('click', function(){ ask.value = b.getAttribute('data-q'); ask.focus(); });
+  });
+
+  function busy(on){
+    sendBtn.disabled = on; stopBtn.classList.toggle('hidden', !on);
+  }
+  function send(){
+    if (controller) return;
+    var text = ask.value.trim();
+    if (!text && !pending.length) return;
+    if (!text) text = 'Solve this exercise step by step, in exam order, with everything I need to paste.';
+    var content = pending.map(function(f){ return { type: 'file', name: f.name, data: f.data }; });
+    content.push({ type: 'text', text: text });
+    convo.push({ role: 'user', content: content });
+    addMsg('user', (pending.length ? '<p>' + pending.map(function(f){ return '<span class="chip">' + esc(f.name) + '</span>'; }).join(' ') + '</p>' : '') + '<p>' + esc(text).replace(/\n/g, '<br>') + '</p>');
+    pending = []; renderChips(); ask.value = '';
+
+    var body = addMsg('assistant', '<p class="thinking">Reading your files and thinking</p>');
+    var answer = '', raf = 0;
+    controller = new AbortController(); busy(true);
+    function fail(msg){
+      body.parentNode.classList.add('err');
+      body.innerHTML = '<p>' + esc(msg) + '</p>';
+      convo.pop();
+    }
+    fetch('/api/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: convo }), signal: controller.signal })
+      .then(function(res){
+        if (!res.ok) return res.json().then(function(j){ throw new Error(j.error || ('Server error ' + res.status)); });
+        var reader = res.body.getReader(), dec = new TextDecoder();
+        function pump(){
+          return reader.read().then(function(r){
+            if (r.done) return;
+            answer += dec.decode(r.value, { stream: true });
+            if (!raf) raf = requestAnimationFrame(function(){ raf = 0; paint(body, answer); });
+            return pump();
+          });
+        }
+        return pump();
+      })
+      .then(function(){
+        if (raf) cancelAnimationFrame(raf);
+        paint(body, answer || '_(empty answer)_');
+        convo.push({ role: 'assistant', content: answer || '(empty answer)' });
+      })
+      .catch(function(err){
+        if (raf) cancelAnimationFrame(raf);
+        if (err.name === 'AbortError'){
+          if (answer){ paint(body, answer + '\n\n*(stopped)*'); convo.push({ role: 'assistant', content: answer }); }
+          else { body.innerHTML = '<p><i>Stopped.</i></p>'; convo.pop(); }
+        } else if (answer){
+          paint(body, answer + '\n\n**Connection lost:** ' + err.message); convo.push({ role: 'assistant', content: answer });
+        } else {
+          fail(/Failed to fetch|NetworkError/i.test(err.message) ? 'Cannot reach the local server. Is start.bat still running?' : err.message);
+          checkStatus();
+        }
+      })
+      .then(function(){ controller = null; busy(false); });
+  }
+  sendBtn.addEventListener('click', send);
+  stopBtn.addEventListener('click', function(){ if (controller) controller.abort(); });
+  ask.addEventListener('keydown', function(e){ if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)){ e.preventDefault(); send(); } });
+  document.getElementById('newChat').addEventListener('click', function(){
+    if (controller) controller.abort();
+    convo = []; pending = []; renderChips(); logEl.innerHTML = '';
+  });
+  function checkStatus(){
+    fetch('/api/status').then(function(r){ return r.json(); }).then(function(s){
+      document.getElementById('keyWarn').classList.toggle('hidden', !!s.key);
+    }).catch(function(){ document.getElementById('keyWarn').classList.remove('hidden'); });
+  }
+
+  render(); prog(); helper(); checkStatus();
+})();
+</script>
+</body>
+</html>
