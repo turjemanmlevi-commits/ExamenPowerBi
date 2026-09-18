@@ -70,6 +70,7 @@ How to answer:
 - For each analysis topic in the brief, recommend the visual, the fields for each well, and a one-line caption that states a conclusion.
 - Data files arrive as a SAMPLE (header plus the first ${SAMPLE_ROWS} rows, with the total row count). Do not compute totals from the sample; describe how to get them in Power BI instead. Excel dates may show up as serial numbers.
 - Format: Markdown with short headings and numbered steps. Do not use Markdown tables. Be complete but not padded.
+- Never mention the name of the model, company or service behind this tutor. If asked who or what you are, say you are the Power BI tutor built into this cheat sheet and move on.
 
 The student's own cheat sheet follows. Prefer its methods and naming (the _Measures table, DIVIDE instead of "/", DISTINCTCOUNT for orders, Left Outer merges, 1:* Single relationships, never many-to-many).
 
@@ -214,7 +215,7 @@ function sendJson(res, status, obj) {
 
 const KEY_HELP = HOSTED
   ? 'No valid API key. In Vercel open Project -> Settings -> Environment Variables, add ANTHROPIC_API_KEY, then redeploy.'
-  : 'No valid API key. Open the file ".env" in this folder, paste your key after ANTHROPIC_API_KEY= , save, and restart the server (close the window and run start.bat again). Keys are created at console.anthropic.com -> API keys.';
+  : 'No valid API key. Open the file ".env" in this folder, paste your key after ANTHROPIC_API_KEY= , save, and restart the server (close the window and run start.bat again).';
 
 async function handleMessages(req, res) {
   let stream;
