@@ -25,7 +25,7 @@ Then open http://localhost:5500 (on Windows you can just double-click `start.bat
 Import the repo in Vercel (no build settings needed; `vercel.json` routes everything to `server.js`). Then in Project → Settings → Environment Variables add:
 
 - `ANTHROPIC_API_KEY` — your Claude API key.
-- `APP_PASSWORD` — a password you invent. The Messages section asks for it before sending; without it a hosted deployment refuses to call Claude, so strangers with the link cannot spend your credit.
+- `APP_PASSWORD` (optional) — if set, the Messages section asks for this password before sending. Without it, anyone who has the URL can use the Messages section on your API credit, so set a spend limit in the Anthropic console.
 
 Redeploy after adding them. Online, files are limited to about 3 MB per message (Vercel request cap); run locally for bigger files.
 

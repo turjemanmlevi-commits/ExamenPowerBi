@@ -979,7 +979,6 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
     <p>In Vercel open <b>Project → Settings → Environment Variables</b>, add these, then <b>Redeploy</b>:</p>
     <ul>
       <li id="hostKey"><code>ANTHROPIC_API_KEY</code> — your Claude API key.</li>
-      <li id="hostPw"><code>APP_PASSWORD</code> — a password you invent. This page asks for it before sending, so strangers with the link cannot spend your API credit.</li>
     </ul>
   </div>
 
@@ -1440,9 +1439,7 @@ RETURN DIVIDE(Cur - Prior, Prior)</pre>
     fetch('/api/status').then(function(r){ return r.json(); }).then(function(s){
       status = s;
       document.getElementById('keyWarn').classList.toggle('hidden', !!s.key || !!s.hosted);
-      document.getElementById('hostWarn').classList.toggle('hidden', !s.hosted || (s.key && s.password));
-      document.getElementById('hostKey').classList.toggle('hidden', !!s.key);
-      document.getElementById('hostPw').classList.toggle('hidden', !!s.password);
+      document.getElementById('hostWarn').classList.toggle('hidden', !s.hosted || !!s.key);
     }).catch(function(){ document.getElementById('keyWarn').classList.remove('hidden'); });
   }
 

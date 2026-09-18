@@ -31,11 +31,11 @@ try {
 const sdk = require('@anthropic-ai/sdk');
 const Anthropic = sdk.default || sdk;
 const hasKey = () => Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
-// A public URL in front of a paid API key needs a gate: hosted deployments refuse to call Claude without APP_PASSWORD.
+// Optional gate for a public URL: when APP_PASSWORD is set, the Messages endpoint requires it.
 const HOSTED = Boolean(process.env.VERCEL);
 const passwordOk = (req) => {
   const want = process.env.APP_PASSWORD;
-  if (!want) return !HOSTED;
+  if (!want) return true;
   const got = Buffer.from(String(req.headers['x-app-password'] || ''));
   return got.length === Buffer.byteLength(want) && crypto.timingSafeEqual(got, Buffer.from(want));
 };
@@ -220,7 +220,6 @@ async function handleMessages(req, res) {
   let stream;
   let started = false;
   try {
-    if (HOSTED && !process.env.APP_PASSWORD) return sendJson(res, 503, { error: 'This deployment has no access password. In Vercel add the environment variable APP_PASSWORD and redeploy.' });
     if (!passwordOk(req)) return sendJson(res, 403, { error: 'Wrong or missing access password. Press Send again to retype it.', code: 'password' });
     const body = JSON.parse(await readBody(req));
     if (!Array.isArray(body.messages) || !body.messages.length) return sendJson(res, 400, { error: 'Empty conversation.' });
